@@ -16,7 +16,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var registerPassword: EditText
     private lateinit var registerRepeatPassword: EditText
     private lateinit var registerButton: Button
-    private lateinit var registerGoLoginButton: TextView
+    private lateinit var registerLoginButton: Button
 
     private lateinit var auth: FirebaseAuth
 
@@ -30,21 +30,21 @@ class RegisterActivity : AppCompatActivity() {
         registerPassword = findViewById(R.id.registerPassword)
         registerRepeatPassword = findViewById(R.id.registerRepitePassword)
         registerButton = findViewById(R.id.registerBtnRegister)
-        registerGoLoginButton = findViewById(R.id.loginRegistrarseLink)
+        registerLoginButton = findViewById(R.id.loginRegistrarseButton)
 
         registerButton.setOnClickListener {
             registrarseNormal()
         }
-        registerGoLoginButton.setOnClickListener {
-            irLogin()
+
+        if (registerLoginButton != null){
+            registerLoginButton.setOnClickListener {
+                startActivity((Intent(this, LoginActivity::class.java)))
+                finish()
+            }
         }
 
 
-    }
 
-    private fun irLogin() {
-        startActivity(Intent(this, LoginActivity::class.java))
-        finish()
     }
 
     private fun registrarseNormal() {

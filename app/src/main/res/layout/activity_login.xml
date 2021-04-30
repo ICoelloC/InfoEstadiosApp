@@ -58,15 +58,13 @@
             android:text="@string/login_google"
     />
 
-    <TextView
-            android:id="@+id/loginRegistrarseLink"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textAlignment="center"
-            android:text="@string/login_registrarse"
-            android:textColor="@color/link"
-
+    <Button
+            android:id="@+id/loginRegistrarseButton"
+            android:layout_width="250dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="5dp"
+            style="@style/primaryButton"
+            android:text="@string/registrarse"
     />
 
 

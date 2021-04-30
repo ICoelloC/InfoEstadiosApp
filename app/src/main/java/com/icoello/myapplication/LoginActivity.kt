@@ -16,7 +16,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginEmail: EditText
     private lateinit var loginPassword: EditText
     private lateinit var loginButton: Button
-    private lateinit var loginGoRegisterButton: TextView
+    //private lateinit var loginRegistrarseButton: Button
 
     private lateinit var auth: FirebaseAuth
 
@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
         loginEmail = findViewById(R.id.loginEmail)
         loginPassword = findViewById(R.id.loginPassword)
         loginButton = findViewById(R.id.loginBtnLogin)
-        loginGoRegisterButton = findViewById(R.id.loginRegistrarseLink)
+        //loginRegistrarseButton = findViewById(R.id.loginRegistrarseButton)
 
         loginButton.setOnClickListener {
             val email = loginEmail.text.toString()
@@ -40,10 +40,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        loginGoRegisterButton.setOnClickListener {
+        /*loginRegistrarseButton.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
             finish()
-        }
+        }*/
 
 
     }
