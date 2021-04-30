@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -56,9 +57,18 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
-                    Toast.makeText(applicationContext, "Login failed!", Toast.LENGTH_LONG).show()
+                    showErrorAlert("Error al iniciar sesión")
                 }
             }
+    }
+
+    private fun showErrorAlert(message:String){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Error")
+        builder.setMessage(message)
+        builder.setPositiveButton("Aceptar", null)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 
     private fun checkEmpty(email: String, password: String): Boolean {

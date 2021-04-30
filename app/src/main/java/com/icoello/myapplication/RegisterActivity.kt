@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -16,7 +17,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var registerPassword: EditText
     private lateinit var registerRepeatPassword: EditText
     private lateinit var registerButton: Button
-    private lateinit var registerLoginButton: Button
+    private lateinit var registerLoginButton: Button!
 
     private lateinit var auth: FirebaseAuth
 
@@ -36,15 +37,20 @@ class RegisterActivity : AppCompatActivity() {
             registrarseNormal()
         }
 
-        if (registerLoginButton != null){
-            registerLoginButton.setOnClickListener {
-                startActivity((Intent(this, LoginActivity::class.java)))
-                finish()
-            }
+        registerLoginButton.setOnClickListener {
+            startActivity((Intent(this, LoginActivity::class.java)))
+            finish()
         }
 
+    }
 
-
+    private fun showErrorAlert(message:String){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Error")
+        builder.setMessage(message)
+        builder.setPositiveButton("Aceptar", null)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 
     private fun registrarseNormal() {
@@ -65,7 +71,7 @@ class RegisterActivity : AppCompatActivity() {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
-                Toast.makeText(applicationContext, "Register failed!", Toast.LENGTH_LONG).show()
+                showErrorAlert("Error al registrarse")
             }
         }
     }
