@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundApp"
+        tools:context=".LoginActivity" android:orientation="vertical">
+
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/logoapp"
+    />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textAlignment="center"
+            style="@style/title"
+            android:text="@string/registrarse"
+    />
+
+    <EditText
+            android:id="@+id/registerEmail"
+            style="@style/editTextLoginRegister"
+            android:background="@color/white"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+    />
+
+    <EditText
+            android:layout_marginTop="10dp"
+            android:id="@+id/registerPassword"
+            style="@style/editTextLoginRegister"
+            android:inputType="textPassword"
+            android:background="@color/white"
+            android:hint="@string/contrasenia"
+    />
+
+    <EditText
+            android:layout_marginTop="10dp"
+            android:id="@+id/registerRepitePassword"
+            style="@style/editTextLoginRegister"
+            android:inputType="textPassword"
+            android:background="@color/white"
+            android:hint="@string/repite_contrasenia"
+    />
+
+    <Button
+            android:id="@+id/registerBtnRegister"
+            android:layout_width="250dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="30dp"
+            style="@style/primaryButton"
+            android:text="@string/registrarse"
+    />
+
+    <TextView
+            android:id="@+id/registerLoginLink"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            android:text="@string/login_aqui"
+            android:textColor="@color/link"
+
+    />
+
+
+</LinearLayout>

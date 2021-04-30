@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "610646165043",
+    "project_id": "infoestadiosapp",
+    "storage_bucket": "infoestadiosapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:610646165043:android:51cb0912e5859bcf664546",
+        "android_client_info": {
+          "package_name": "com.icoello.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "610646165043-nk8oh7399rfeoqanr04n6jtqc8e8vkgv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsguY5bqBT37DwlTGPxKi2jL1YIjWV_vk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "610646165043-nk8oh7399rfeoqanr04n6jtqc8e8vkgv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

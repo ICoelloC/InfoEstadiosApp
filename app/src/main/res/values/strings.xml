@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">InfoEstadiosApp</string>
+    <string name="email">email</string>
+    <string name="login">Login</string>
+    <string name="contrasenia">contraseña</string>
+    <string name="login_google">login con google</string>
+    <string name="login_registrarse">¿Aún no tienes cuenta? Registrate aqui</string>
+    <string name="logoapp">LogoApp</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="login_aqui">¿Tienes cuenta? Incia sesión aquí</string>
+    <string name="repite_contrasenia">repite contraseña</string>
+</resources>
