@@ -17,7 +17,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var registerPassword: EditText
     private lateinit var registerRepeatPassword: EditText
     private lateinit var registerButton: Button
-    private lateinit var registerLoginButton: Button!
+    private lateinit var registerGoLoginButton: Button
 
     private lateinit var auth: FirebaseAuth
 
@@ -31,13 +31,13 @@ class RegisterActivity : AppCompatActivity() {
         registerPassword = findViewById(R.id.registerPassword)
         registerRepeatPassword = findViewById(R.id.registerRepitePassword)
         registerButton = findViewById(R.id.registerBtnRegister)
-        registerLoginButton = findViewById(R.id.loginRegistrarseButton)
+        registerGoLoginButton = findViewById(R.id.registerGoLoginButton)
 
         registerButton.setOnClickListener {
             registrarseNormal()
         }
 
-        registerLoginButton.setOnClickListener {
+        registerGoLoginButton.setOnClickListener {
             startActivity((Intent(this, LoginActivity::class.java)))
             finish()
         }
@@ -59,7 +59,7 @@ class RegisterActivity : AppCompatActivity() {
         var password = registerPassword.text.toString()
         var repeatPassword = registerRepeatPassword.text.toString()
 
-        if (password.equals(repeatPassword) && checkEmpty(email, password, repeatPassword)) {
+        if (password == repeatPassword && checkEmpty(email, password, repeatPassword)) {
             firebaseNormalRegister(email, password)
         }
 
@@ -71,7 +71,7 @@ class RegisterActivity : AppCompatActivity() {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
-                showErrorAlert("Error al registrarse")
+                showErrorAlert("Error al registrarse, credenciales incorrectas o repetidas")
             }
         }
     }

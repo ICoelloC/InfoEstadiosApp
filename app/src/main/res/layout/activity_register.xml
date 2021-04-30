@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/backgroundApp"
-        tools:context=".LoginActivity" android:orientation="vertical">
+        tools:context=".LoginActivity"
+        android:orientation="vertical">
 
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/logoapp"
-    />
+            android:contentDescription="@string/logoapp" />
 
     <TextView
             android:layout_width="match_parent"
@@ -19,8 +17,7 @@
             android:layout_marginTop="15dp"
             android:textAlignment="center"
             style="@style/title"
-            android:text="@string/registrarse"
-    />
+            android:text="@string/registrarse" />
 
     <EditText
             android:id="@+id/registerEmail"
@@ -28,7 +25,7 @@
             android:background="@color/white"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-    />
+            android:autofillHints="introduzca un correo electrónico" />
 
     <EditText
             android:layout_marginTop="10dp"
@@ -37,7 +34,7 @@
             android:inputType="textPassword"
             android:background="@color/white"
             android:hint="@string/contrasenia"
-    />
+            android:autofillHints="introduzca una contraseña" />
 
     <EditText
             android:layout_marginTop="10dp"
@@ -46,7 +43,7 @@
             android:inputType="textPassword"
             android:background="@color/white"
             android:hint="@string/repite_contrasenia"
-    />
+            android:autofillHints="introduzca una contraseña" />
 
     <Button
             android:id="@+id/registerBtnRegister"
@@ -54,17 +51,15 @@
             android:layout_height="56dp"
             android:layout_marginTop="30dp"
             style="@style/primaryButton"
-            android:text="@string/registrarse"
-    />
+            android:text="@string/registrarse" />
 
     <Button
-            android:id="@+id/registerLoginButton"
+            android:id="@+id/registerGoLoginButton"
             android:layout_width="250dp"
             android:layout_height="56dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             style="@style/primaryButton"
-            android:text="@string/login"
-            />
+            android:text="@string/login" />
 
 
 </LinearLayout>

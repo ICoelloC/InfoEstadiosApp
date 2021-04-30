@@ -17,7 +17,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginEmail: EditText
     private lateinit var loginPassword: EditText
     private lateinit var loginButton: Button
-    //private lateinit var loginRegistrarseButton: Button
+    private lateinit var loginGoRegisterButton: Button
 
     private lateinit var auth: FirebaseAuth
 
@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
         loginEmail = findViewById(R.id.loginEmail)
         loginPassword = findViewById(R.id.loginPassword)
         loginButton = findViewById(R.id.loginBtnLogin)
-        //loginRegistrarseButton = findViewById(R.id.loginRegistrarseButton)
+        loginGoRegisterButton = findViewById(R.id.loginGoRegisterButton)
 
         loginButton.setOnClickListener {
             val email = loginEmail.text.toString()
@@ -41,11 +41,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        /*loginRegistrarseButton.setOnClickListener {
+        loginGoRegisterButton.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
             finish()
-        }*/
-
+        }
 
     }
 
@@ -57,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
-                    showErrorAlert("Error al iniciar sesión")
+                    showErrorAlert("Error al iniciar sesión, no hay ningún usuario con ese correo o contraseña")
                 }
             }
     }

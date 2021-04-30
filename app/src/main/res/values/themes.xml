@@ -16,7 +16,6 @@
 
     <style name="title">
         <item name="android:textSize">40sp</item>
-        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="editTextLoginRegister">
@@ -32,5 +31,14 @@
         <item name="color">@color/white</item>
         <item name="android:layout_gravity">center</item>
     </style>
+
+    <style name="Theme.InfoEstadiosApp.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.InfoEstadiosApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.InfoEstadiosApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

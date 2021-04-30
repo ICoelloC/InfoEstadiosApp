@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/backgroundApp"
         tools:context=".LoginActivity">
 
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/logoapp"
-    />
+            android:contentDescription="@string/logoapp" />
 
     <TextView
             android:layout_width="match_parent"
@@ -20,16 +17,14 @@
             android:layout_marginTop="15dp"
             android:textAlignment="center"
             style="@style/title"
-            android:text="@string/login"
-    />
+            android:text="@string/login" />
 
     <EditText
             android:id="@+id/loginEmail"
             style="@style/editTextLoginRegister"
             android:background="@color/white"
             android:hint="@string/email"
-            android:inputType="textEmailAddress"
-    />
+            android:inputType="textEmailAddress" />
 
     <EditText
             android:layout_marginTop="10dp"
@@ -37,8 +32,7 @@
             style="@style/editTextLoginRegister"
             android:inputType="textPassword"
             android:background="@color/white"
-            android:hint="@string/contrasenia"
-    />
+            android:hint="@string/contrasenia" />
 
     <Button
             android:id="@+id/loginBtnLogin"
@@ -46,8 +40,7 @@
             android:layout_height="56dp"
             android:layout_marginTop="30dp"
             style="@style/primaryButton"
-            android:text="@string/login"
-    />
+            android:text="@string/login" />
 
     <Button
             android:id="@+id/loginBtnGoogleLogin"
@@ -55,17 +48,15 @@
             android:layout_height="56dp"
             android:layout_marginTop="10dp"
             style="@style/primaryButton"
-            android:text="@string/login_google"
-    />
+            android:text="@string/login_google" />
 
     <Button
-            android:id="@+id/loginRegistrarseButton"
+            android:id="@+id/loginGoRegisterButton"
             android:layout_width="250dp"
             android:layout_height="56dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             style="@style/primaryButton"
-            android:text="@string/registrarse"
-    />
+            android:text="@string/registrarse"/>
 
 
 </LinearLayout>
