@@ -8,7 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="backgroundApp">#8DA686</color>
+    <color name="backgroundApp">#68A657</color>
     <color name="primaryColor">#4caf50</color>
     <color name="primaryLightColor">#80e27e</color>
     <color name="primaryDarkColor">#087f23</color>
@@ -19,5 +19,6 @@
     <color name="secondaryTextColor">#ffffff</color>
 
     <color name="link">#163770</color>
+    <color name="colorBotonOscuro">#2F551E</color>
 
 </resources>

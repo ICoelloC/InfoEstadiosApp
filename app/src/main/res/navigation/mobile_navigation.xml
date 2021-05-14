@@ -9,7 +9,7 @@
             android:id="@+id/nav_home"
             android:name="com.icoello.myapplication.ui.home.HomeFragment"
             android:label="@string/menu_home"
-            tools:layout="@layout/fragment_home" />
+            tools:layout="@layout/fragment_estadios" />
 
     <fragment
             android:id="@+id/nav_gallery"

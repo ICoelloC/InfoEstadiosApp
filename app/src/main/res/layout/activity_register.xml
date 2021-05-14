@@ -3,47 +3,69 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".LoginActivity"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/fondo">
 
     <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/logoapp" />
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:srcCompat="@drawable/user"
+            android:contentDescription="@string/logoapp"
+            android:layout_gravity="center"
+            app:layout_constraintHorizontal_bias="0.501"/>
+
 
     <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:textAlignment="center"
-            style="@style/title"
+            android:layout_marginLeft="30dp"
+            android:textColor="@color/white"
+            android:textSize="30sp"
             android:text="@string/registrarse" />
+
+
+    <EditText
+            android:id="@+id/registerUsername"
+            style="@style/editTextLoginRegister"
+            android:hint="@string/username"
+            android:inputType="textEmailAddress"
+            android:autofillHints="introduzca el nombre de usuario"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp" />
 
     <EditText
             android:id="@+id/registerEmail"
             style="@style/editTextLoginRegister"
-            android:background="@color/white"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-            android:autofillHints="introduzca un correo electrónico" />
+            android:autofillHints="introduzca un correo electrónico"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp" />
 
     <EditText
-            android:layout_marginTop="10dp"
             android:id="@+id/registerPassword"
             style="@style/editTextLoginRegister"
-            android:inputType="textPassword"
-            android:background="@color/white"
             android:hint="@string/contrasenia"
-            android:autofillHints="introduzca una contraseña" />
+            android:inputType="textEmailAddress"
+            android:autofillHints="introduzca la contraseña"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"/>
 
     <EditText
-            android:layout_marginTop="10dp"
-            android:id="@+id/registerRepitePassword"
+            android:id="@+id/registerRepeatPassword"
             style="@style/editTextLoginRegister"
-            android:inputType="textPassword"
-            android:background="@color/white"
             android:hint="@string/repite_contrasenia"
-            android:autofillHints="introduzca una contraseña" />
+            android:inputType="textEmailAddress"
+            android:autofillHints="repite la contraseña"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"/>
 
     <Button
             android:id="@+id/registerBtnRegister"

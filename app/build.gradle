@@ -51,4 +51,37 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    // Mis librerías
+    // JSON
+    implementation 'com.google.code.gson:gson:2.8.6'
+    // Permisos
+    implementation 'com.karumi:dexter:6.2.1'
+    // Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    // Mapa
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    // Localización
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
+    // QR Generador
+    implementation 'com.google.zxing:core:3.4.1'
+    // QR Lector
+    implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:26.2.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    // Auth https://firebase.google.com/docs/auth
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    // Auth con Google https://firebase.google.com/docs/auth/android/google-signin
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    // Messaging https://firebase.google.com/docs/cloud-messaging/android/client
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    // Firestore https://firebase.google.com/docs/firestore/quickstart
+    implementation 'com.google.firebase:firebase-firestore:21.2.1'
+    // Storage https://firebase.google.com/docs/storage/android/start
+    implementation 'com.google.firebase:firebase-storage-ktx'
+
 }

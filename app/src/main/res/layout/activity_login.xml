@@ -1,41 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".LoginActivity">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".LoginActivity"
+        android:orientation="vertical"
+        android:background="@drawable/fondo">
 
     <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/logoapp" />
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:contentDescription="@string/logoapp"
+            app:srcCompat="@drawable/logo"
+            android:layout_gravity="center"
+            app:layout_constraintHorizontal_bias="0.501"/>
 
     <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:textAlignment="center"
-            style="@style/title"
+            android:layout_marginLeft="30dp"
+            android:textColor="@color/white"
+            android:textSize="30sp"
             android:text="@string/login" />
 
     <EditText
             android:id="@+id/loginEmail"
             style="@style/editTextLoginRegister"
-            android:background="@color/white"
             android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:autofillHints="introduzca un correo electrónico"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"/>
 
     <EditText
-            android:layout_marginTop="10dp"
             android:id="@+id/loginPassword"
             style="@style/editTextLoginRegister"
+            android:hint="@string/contrasenia"
             android:inputType="textPassword"
-            android:background="@color/white"
-            android:hint="@string/contrasenia" />
+            android:autofillHints="introduzca la contraseña"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"/>
 
     <Button
-            android:id="@+id/loginBtnLogin"
+            android:id="@+id/loginLoginButton"
             android:layout_width="250dp"
             android:layout_height="56dp"
             android:layout_marginTop="30dp"
@@ -43,12 +54,12 @@
             android:text="@string/login" />
 
     <Button
-            android:id="@+id/loginBtnGoogleLogin"
+            android:id="@+id/loginGoogleLoginButton"
             android:layout_width="250dp"
             android:layout_height="56dp"
             android:layout_marginTop="10dp"
             style="@style/primaryButton"
-            android:text="@string/login_google" />
+            android:text="Log in Google" />
 
     <Button
             android:id="@+id/loginGoRegisterButton"
@@ -56,7 +67,7 @@
             android:layout_height="56dp"
             android:layout_marginTop="10dp"
             style="@style/primaryButton"
-            android:text="@string/registrarse"/>
+            android:text="@string/registrarse" />
 
 
 </LinearLayout>

@@ -29,7 +29,7 @@ class RegisterActivity : AppCompatActivity() {
 
         registerEmail = findViewById(R.id.registerEmail)
         registerPassword = findViewById(R.id.registerPassword)
-        registerRepeatPassword = findViewById(R.id.registerRepitePassword)
+        registerRepeatPassword = findViewById(R.id.registerRepeatPassword)
         registerButton = findViewById(R.id.registerBtnRegister)
         registerGoLoginButton = findViewById(R.id.registerGoLoginButton)
 
