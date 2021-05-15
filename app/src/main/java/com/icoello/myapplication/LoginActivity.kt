@@ -33,6 +33,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private val Rc_SIGN_IN = 9001
 
+    private  val googleSignIn = 300
+
     companion object{
         private const val TAG = "Login"
     }
@@ -126,8 +128,19 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun iniciarSesionGoogle() {
+        /*
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, Rc_SIGN_IN)
+         */
+        val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        val googleClient = GoogleSignIn.getClient(this, googleConf)
+        googleClient.signOut()
+
+        startActivityForResult(googleClient.signInIntent, googleSignIn)
     }
 
 

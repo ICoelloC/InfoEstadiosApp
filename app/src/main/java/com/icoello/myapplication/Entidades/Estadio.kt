@@ -10,6 +10,9 @@ data class Estadio(
     var latitud: String = "",
     var longitud: String = "",
     var seguidores: Int = 0,
+    var id_usuario: String = "",
+    var  foto:String = "",
+    var seguido: Boolean = false,
 ) {
     constructor(
         nombre: String,
@@ -17,7 +20,10 @@ data class Estadio(
         equipo: String,
         latitud: String,
         longitud: String,
-        seguidores: Int
+        seguidores: Int,
+        id_usuario: String,
+        foto: String,
+        seguido: Boolean,
     ) : this(
         (UUID.randomUUID().toString()),
         nombre,
@@ -25,11 +31,14 @@ data class Estadio(
         equipo,
         latitud,
         longitud,
-        seguidores
+        seguidores,
+        id_usuario,
+        foto,
+        seguido
     )
 
     override fun toString(): String {
-        return "Lugar(id=$id, nombre=$nombre, capacidad=$capacidad, equipo=$equipo, latitud=$latitud, longitud=$longitud, seguidores)"
+        return "Lugar(id=$id, nombre=$nombre, capacidad=$capacidad, equipo=$equipo, latitud=$latitud, longitud=$longitud, seguidores=$seguidores, id_usuario = $id_usuario, foto =$foto, seguido=$seguido)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -42,6 +51,8 @@ data class Estadio(
         if (equipo != other.equipo) return  false
         if (latitud != other.latitud) return  false
         if (longitud != other.longitud) return  false
+        if (foto != other.foto) return  false
+        if (seguido != other.seguido) return false
 
         return true
     }
@@ -54,6 +65,9 @@ data class Estadio(
         result = 31 * result + latitud.hashCode()
         result = 31 * result + longitud.hashCode()
         result = 31 * result + seguidores.hashCode()
+        result = 31 * result + id_usuario.hashCode()
+        result = 31 * result + foto.hashCode()
+        result = 31 * result + seguido.hashCode()
         return result
     }
 }

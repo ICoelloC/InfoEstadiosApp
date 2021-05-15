@@ -1,25 +1,30 @@
 package com.icoello.myapplication
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.provider.MediaStore
+import android.util.Log
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE
 
 class RegisterActivity : AppCompatActivity() {
+    private lateinit var registerUsername: EditText
     private lateinit var registerEmail: EditText
     private lateinit var registerPassword: EditText
-    private lateinit var registerRepeatPassword: EditText
     private lateinit var registerButton: Button
     private lateinit var registerGoLoginButton: Button
+    private lateinit var imgFoto: ImageView
 
     private lateinit var auth: FirebaseAuth
+
+    val REQUEST_CODE = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,11 +32,12 @@ class RegisterActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
+        registerUsername = findViewById(R.id.registerUsername)
         registerEmail = findViewById(R.id.registerEmail)
         registerPassword = findViewById(R.id.registerPassword)
-        registerRepeatPassword = findViewById(R.id.registerRepeatPassword)
         registerButton = findViewById(R.id.registerBtnRegister)
         registerGoLoginButton = findViewById(R.id.registerGoLoginButton)
+        imgFoto = findViewById(R.id.registerFoto)
 
         registerButton.setOnClickListener {
             registrarseNormal()
@@ -42,6 +48,29 @@ class RegisterActivity : AppCompatActivity() {
             finish()
         }
 
+        imgFoto.setOnClickListener {
+            if (checkSelfPermission(android.Manifest.permission.CAMERA)  != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CODE)
+            }
+
+            if (checkSelfPermission(android.Manifest.permission.CAMERA)  == PackageManager.PERMISSION_GRANTED) {
+                foto()
+            }else{
+                Toast.makeText (this, "Camera permission necesary", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        capturePhoto()
+
+    }
+
+    private fun foto() {
+        if (checkSelfPermission(android.Manifest.permission.CAMERA)  != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CODE)
+        }
+
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, REQUEST_CODE)
     }
 
     private fun showErrorAlert(message:String){
@@ -53,13 +82,33 @@ class RegisterActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    fun capturePhoto() {
+        imgFoto.setOnClickListener {
+
+            if (checkSelfPermission(android.Manifest.permission.CAMERA)  != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CODE)
+            }
+
+            if (checkSelfPermission(android.Manifest.permission.CAMERA)  == PackageManager.PERMISSION_GRANTED) {
+                foto()
+            }else{
+                Toast.makeText (this, "Camera permission necesary", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+    }
+
     private fun registrarseNormal() {
 
         var email = registerEmail.text.toString()
         var password = registerPassword.text.toString()
-        var repeatPassword = registerRepeatPassword.text.toString()
+        var username = registerUsername.text.toString()
 
-        if (password == repeatPassword && checkEmpty(email, password, repeatPassword)) {
+        Log.i("REGISTRAR", username)
+        Log.i("REGISTRAR", email)
+        Log.i("REGISTRAR", password)
+
+        if (checkEmpty(email, password, username)) {
             firebaseNormalRegister(email, password)
         }
 
@@ -76,7 +125,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkEmpty(email: String, password: String, repeatPassword: String): Boolean {
-        return email.isNotEmpty() && password.isNotEmpty() && repeatPassword.isNotEmpty()
+    private fun checkEmpty(email: String, password: String, username: String): Boolean {
+        return email.isNotEmpty() && password.isNotEmpty() && username.isNotEmpty()
     }
 }

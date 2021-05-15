@@ -20,5 +20,11 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="username">nombre de usuario</string>
+    <string name="username">username</string>
+    <string name="menu_estadio">Estadios</string>
+    <string name="menu_mapa">Mapa</string>
+    <string name="menu_perfil">Mi perfil</string>
+    <string name="linterna">Linterna</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="prefs_file">com.icoello.myalication.PREFERENCE_FILE_KEY</string>
 </resources>

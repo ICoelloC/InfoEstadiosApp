@@ -9,6 +9,7 @@
         android:background="@drawable/fondo">
 
     <ImageView
+            android:id="@+id/registerFoto"
             android:layout_width="120dp"
             android:layout_height="120dp"
             app:srcCompat="@drawable/user"
@@ -53,16 +54,6 @@
             android:hint="@string/contrasenia"
             android:inputType="textEmailAddress"
             android:autofillHints="introduzca la contraseña"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white"
-            android:layout_marginTop="10dp"/>
-
-    <EditText
-            android:id="@+id/registerRepeatPassword"
-            style="@style/editTextLoginRegister"
-            android:hint="@string/repite_contrasenia"
-            android:inputType="textEmailAddress"
-            android:autofillHints="repite la contraseña"
             android:textColorHint="@color/white"
             android:textColor="@color/white"
             android:layout_marginTop="10dp"/>
