@@ -1,5 +1,7 @@
 package com.icoello.myapplication.ui.home
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.*
 import android.os.Bundle
 import android.text.TextUtils.indexOf
@@ -160,7 +162,71 @@ class EstadiosFragment : Fragment() {
             itemView.left.toFloat(), itemView.top.toFloat(), dX, itemView.bottom.toFloat()
         )
         canvas.drawRect(background, paintSweep)
-        val icon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable)
+        val icon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_edit)
+        val iconDest = RectF(
+            itemView.left.toFloat() + width,
+            itemView.top.toFloat() + width,
+            itemView.left.toFloat() + 2 * width,
+            itemView.bottom.toFloat() - width
+        )
+        canvas.drawBitmap(icon, null, iconDest, paintSweep)
+    }
+
+    private fun nuevoElemento(){
+        Log.i(TAG, "Nuevo estadio")
+        abrirDetalle(null)
+    }
+
+    private fun insertarItemLista(item: Estadio){
+        this.estadiosAdapter.addItem(item)
+        estadiosAdapter.notifyDataSetChanged()
+    }
+
+    private fun editarElemento(position: Int){
+        Log.i(TAG, "Editando el elemento pos: $position")
+        actualizarVistaLista()
+        abrirDetalle(ESTADIOS[position])
+    }
+
+    private fun actualizarItemLista(item: Estadio, position: Int){
+        this.estadiosAdapter.updateItem(item, position)
+        estadiosAdapter.notifyDataSetChanged()
+    }
+
+    private fun borrarElemento(position: Int){
+        Log.i(TAG, "Borrando el elemento pos: $position")
+        abrirDetalle(ESTADIOS[position])
+    }
+
+    private fun eliminarItemLista(position: Int){
+        this.estadiosAdapter.removeItem(position)
+        estadiosAdapter.notifyDataSetChanged()
+    }
+
+    private fun actualizarVistaLista(){
+        estadiosRecycler.adapter = estadiosAdapter
+    }
+
+    private fun abrirElemento(estadio: Estadio){
+        Log.i(TAG, "Visualizando el elemento: ${estadio.id}")
+        abrirDetalle(estadio)
+    }
+
+    private fun abrirDetalle(estadio: Estadio?) {
+        Log.i("Estadios", "Abriendo el elemento pos: " + estadio?.id)
+        val estadioDetalle = EstadioDetalleFragment(estadio)
+        actualizarVistaLista()
+    }
+
+    private fun eventoClicFila(estadio: Estadio){
+        abrirElemento(estadio)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_CANCELED) {
+            return
+        }
     }
 
     private fun cargarEstadios() {
@@ -220,31 +286,7 @@ class EstadiosFragment : Fragment() {
             actualizarItemLista(miEstadio, index)
     }
 
-    private fun eliminarItemLista(position: Int) {
-        this.estadiosAdapter.removeItem(position)
-        estadiosAdapter.notifyDataSetChanged()
-    }
-
-    private fun eventoClicFila(estadio: Estadio) {
-        abrirElemento(estadio)
-    }
-
-    private fun abrirElemento(estadio: Estadio) {
-        Log.i(TAG, "Visualizando el elemento: ${estadio.id}")
-        abrirDetalle(estadio)
-    }
-
-    private fun abrirDetalle(estadio: Estadio?) {
-        Log.i("Estadios", "Abriendo el elemento pos: " + estadio?.id)
-        val estadioDetalle = EstadioDetalleFragment(estadio)
-        actualizarVistaEstadio()
-    }
-
-    private fun actualizarVistaEstadio() {
-        estadiosRecycler.adapter = estadiosAdapter
-    }
-
-    private fun documentToLugar(doc: Map<String, Any>) = Estadio(
+    private fun documentToEstadio(doc: Map<String, Any>) = Estadio(
         id = doc["id"].toString(),
         nombre = doc["nombre"].toString(),
         capacidad = doc["capacidad"].toString().toInt(),
@@ -259,11 +301,19 @@ class EstadiosFragment : Fragment() {
 
     private fun insertarDocumento(doc: MutableMap<String, Any>) {
         val miEstadio = documentToEstadio(doc)
-        Log.i(TAG, "Añadiendo lugar: ${miLugar.id}")
+        Log.i(TAG, "Añadiendo lugar: ${miEstadio.id}")
         // Buscamos que no este... para evitar distintas llamadas de ADD
-        val existe = LUGARES.any { lugar -> lugar.id == miLugar.id }
+        val existe = ESTADIOS.any { lugar -> lugar.id == miEstadio.id }
         if (!existe)
-            insertarItemLista(miLugar)
+            insertarItemLista(miEstadio)
+    }
+
+    private fun visualizarListaItems(){
+        try{
+            actualizarVistaLista()
+        }catch (ex:Exception){
+
+        }
     }
 
 }
