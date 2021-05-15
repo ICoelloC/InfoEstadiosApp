@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.icoello.myapplication.Entidades.Estadio
 import com.icoello.myapplication.R
+import kotlinx.android.synthetic.main.fragment_estadios.*
 
 class EstadiosFragment : Fragment() {
 
@@ -62,12 +63,11 @@ class EstadiosFragment : Fragment() {
     private fun initUI() {
         Log.i(TAG, "Init IU")
         iniciarSwipeRecarga()
-        cargarLugares()
-        iniciarSpinner()
+        cargarEstadios()
         iniciarSwipeHorizontal()
-        lugaresRecycler.layoutManager = LinearLayoutManager(context)
-        lugaresFabNuevo.setOnClickListener { nuevoElemento() }
-        lugaresButtonVoz.setOnClickListener { controlPorVoz() }
+
+        estadiosRecycler.layoutManager = LinearLayoutManager(context)
+        estadiosFabNuevo.setOnClickListener { nuevoElemento() }
 
         Log.i(TAG, "Fin la IU")
     }
@@ -94,7 +94,7 @@ class EstadiosFragment : Fragment() {
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    val posiion = viewHolder.adapterPosition
+                    val position = viewHolder.adapterPosition
                     when (direction) {
                         ItemTouchHelper.LEFT -> {
                             borrarElemento(position)
@@ -214,7 +214,12 @@ class EstadiosFragment : Fragment() {
 
     private fun abrirDetalle(estadio: Estadio?) {
         Log.i("Estadios", "Abriendo el elemento pos: " + estadio?.id)
-        val estadioDetalle = EstadioDetalleFragment(estadio)
+        val estadioDetalle = EstadioDetalle(estadio)
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        transaction.add(R.id.nav_host_fragment, estadioDetalle)
+        transaction.addToBackStack(null)
+        transaction.commit()
         actualizarVistaLista()
     }
 
@@ -269,16 +274,16 @@ class EstadiosFragment : Fragment() {
     }
 
     private fun eliminarDocumento(doc: Map<String, Any>) {
-        val miEstadio = documentToLugar(doc)
+        val miEstadio = documentToEstadio(doc)
         Log.i(TAG, "Elimando lugar: ${miEstadio.id}")
         // Buscamos que esté
-        val index = Estadio.indexOf(miEstadio)
+        val index = ESTADIOS.indexOf(miEstadio)
         if (index >= 0)
             eliminarItemLista(index)
     }
 
     private fun modificarDocumento(doc: Map<String, Any>) {
-        val miEstadio = documentToLugar(doc)
+        val miEstadio = documentToEstadio(doc)
         Log.i(TAG, "Modificando lugar: ${miEstadio.id}")
         // Buscamos que esté,
         val index = ESTADIOS.indexOf(miEstadio)

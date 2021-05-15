@@ -21,5 +21,7 @@
     <color name="link">#163770</color>
     <color name="colorBotonOscuro">#2F551E</color>
     <color name="seguirOff">#F6EBEA</color>
+    <color name="seguirOn">#EF695D</color>
+    <color name="colorAccent">#326F3A</color>
 
 </resources>

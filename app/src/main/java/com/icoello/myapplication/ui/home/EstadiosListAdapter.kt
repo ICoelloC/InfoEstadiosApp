@@ -1,36 +1,55 @@
 package com.icoello.myapplication.ui.home
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.auth.api.Auth
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.icoello.myapplication.Entidades.Estadio
 import com.icoello.myapplication.R
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_estadio.view.*
 
 class EstadiosListAdapter(
     private val listaEstadios: MutableList<Estadio>,
     private val accionPrincipal: (Estadio) -> Unit,
-) : RecyclerView.Adapter<EstadiosListAdapter.EstadioViewHolder>() {
+) : RecyclerView.Adapter<EstadiosListAdapter.EstadiosViewHolder>() {
 
     private var FireStore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     companion object {
-        private const val TAG = "ADAPTER"
+        private const val TAG = "Adapter"
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EstadioViewHolder {
-        return EstadioViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EstadiosViewHolder {
+        return EstadiosViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_estadio, parent, false)
         )
     }
 
-    override fun onBindViewHolder(holder: EstadioViewHolder, viewType: Int) {
+    override fun onBindViewHolder(holder: EstadiosViewHolder, position: Int) {
+        holder.itemNombre.text = listaEstadios[position].nombre
+        holder.itemSeguidores.text = listaEstadios[position].seguidores.toString()
+        imagenEstadio(listaEstadios[position], holder)
 
+        colorBotonSeguir(position, holder)
+        holder.itemSeguir.setOnClickListener {
+            eventoBotonSeguir(position, holder)
+        }
+
+        holder.itemFoto.setOnClickListener {
+            accionPrincipal(listaEstadios[position])
+        }
     }
 
     fun removeItem(position: Int) {
@@ -54,47 +73,64 @@ class EstadiosListAdapter(
         return listaEstadios.size
     }
 
-    /*
-    private fun imagenEstadio(estadio: Estadio, holder: EstadioViewHolder) {
-        val docRef = FireStore.collection("estadios").document(estadio.foto)
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    val miImagen = document.toObject(Estadio::class.java)
-                    Log.i(TAG, "fotografiasGetById ok: ${document.data}")
-                    Picasso.get()
-                        // .load(R.drawable.user_avatar)
-                        .load(miImagen?.uri)
-                        .into(holder.itemLugarImagen)
-                } else {
-                    Log.i(TAG, "Error: No exite fotografía")
-                    imagenPorDefecto(holder)
-                }
-            }
+    private fun imagenEstadio(estadio: Estadio, holder: EstadiosViewHolder) {
+
+        if (estadio.foto != "") {
+            Picasso.get()
+                .load(estadio?.foto)
+                .into(holder.itemFoto)
+        } else {
+            imagenPorDefecto(holder)
+        }
     }
-     */
-/*
-    private fun imagenPorDefecto(holder: EstadioViewHolder) {
-        holder.itemEstadioFoto.setImageBitmap(
+
+    private fun imagenPorDefecto(holder: EstadiosViewHolder) {
+        holder.itemFoto.setImageBitmap(
             BitmapFactory.decodeResource(
                 holder.context?.resources,
                 R.drawable.logo
             )
         )
+    }
 
+    private fun eventoBotonSeguir(position: Int, holder: EstadiosViewHolder) {
+        listaEstadios[position].seguido = !listaEstadios[position].seguido
+        colorBotonSeguir(position, holder)
+        if (listaEstadios[position].seguido)
+            listaEstadios[position].seguidores++
+        else
+            listaEstadios[position].seguidores--
+
+        actualizarEstadioSeguidores(listaEstadios[position], holder)
     }
-*/
-/*
-    private fun eventoBotonSeguir(position: Int, holder: EstadioViewHolder){
-        listaEstadios[position].seguidores != listaEstadios[position].seguidores
-        colorBotonFavorito(position, holder)
-        if (listaEstadios[position].se)
+
+    private fun actualizarEstadioSeguidores(estadio: Estadio, holder: EstadiosViewHolder) {
+        var estadioRef = FireStore.collection("estadios").document(estadio.id)
+        estadioRef
+            .update(mapOf(
+                "seguidores" to estadio.seguidores,
+                "seguido" to estadio.seguido
+            ))
+            .addOnSuccessListener {
+                Log.i(TAG, "lugarUpdate ok")
+            }.addOnFailureListener { e -> Log.w(TAG, "Error actualiza votos", e) }
     }
-*/
-    class EstadioViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        //var itemEstadioFoto = itemView.itemEstadioFoto
-        //var itemLugarNomnre = itemView.item
-        //var context = itemView.context
+
+    private fun colorBotonSeguir(position: Int, holder: EstadiosViewHolder) {
+        if (listaEstadios[position].seguido)
+            holder.itemSeguir.backgroundTintList =
+                AppCompatResources.getColorStateList(holder.context, R.color.seguirOn)
+        else
+            holder.itemSeguir.backgroundTintList =
+                AppCompatResources.getColorStateList(holder.context, R.color.seguirOff)
+    }
+
+    class EstadiosViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        var itemFoto: ImageView = itemView.itemEstadioFoto
+        var itemNombre: TextView = itemView.itemEstadioNombre
+        var itemSeguidores: TextView = itemView.itemEstadioSeguidores
+        var itemSeguir: FloatingActionButton = itemView.itemEstadioSeguir
+        var context = itemView.context
     }
 
 }

@@ -22,4 +22,12 @@
             android:name="com.icoello.myapplication.ui.perfil.PerfilFragment"
             android:label="@string/menu_slideshow"
             tools:layout="@layout/fragment_perfil" />
+    <fragment
+            android:id="@+id/estadioDetalle"
+            android:name="com.icoello.myapplication.ui.home.EstadioDetalle"
+            android:label="EstadioDetalle" />
+    <fragment
+            android:id="@+id/linternaFragment"
+            android:name="com.icoello.myapplication.ui.linterna.LinternaFragment"
+            android:label="LinternaFragment" />
 </navigation>

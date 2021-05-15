@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/fondo">
+
+    <ImageView
+            android:id="@+id/detalleEstadioImagen"
+            android:layout_width="match_parent"
+            android:layout_height="145dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo"
+            app:srcCompat="@drawable/logo"
+            tools:srcCompat="@drawable/logo" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/detalleEstadioFabCamara"
+            style="@android:style/Widget.Material.ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="115dp"
+            android:layout_marginRight="8dp"
+            android:backgroundTint="@color/backgroundApp"
+            android:clickable="true"
+            android:src="@drawable/ic_menu_camera"
+            app:rippleColor="@color/white" />
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="145dp"
+            android:layout_marginEnd="10dp"
+            android:background="#40733F">
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/detalleEstadioTextNombre"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColorHint="@color/white"
+                android:hint="Nombre">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#40733F"
+                    android:textColor="@color/white"
+                    android:id="@+id/detalleEstadioInputNombre" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/detalleEstadioTextEquipo"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detalleEstadioTextNombre"
+                android:layout_marginTop="10dp"
+                android:textColorHint="@color/white"
+                android:hint="Equipo">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#40733F"
+                    android:textColor="@color/white"
+                    android:id="@+id/detalleEstadioInputEquipo" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/detalleEstadioTextCapacidad"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detalleEstadioTextEquipo"
+                android:layout_marginTop="10dp"
+                android:textColorHint="@color/white"
+                android:hint="Capacidad">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#40733F"
+                    android:textColor="@color/white"
+                    android:id="@+id/detalleEstadioInputCapacidad" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+                android:id="@+id/detalleEstadioLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detalleEstadioTextCapacidad">
+
+            <TextView
+                    android:text="100 seguidores"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/detalleLugarTextVotos"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:clickable="false"
+                    android:gravity="right|center_vertical"
+                    android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <fragment
+                android:layout_height="145dp"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/detalleEstadioMapa"
+                tools:context="com.example.mislugares.UI.noticias.NoticiasFragment"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_below="@+id/detalleEstadioLinearLayout" />
+
+        <LinearLayout
+                android:id="@+id/detalleEstadioLL2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detalleEstadioMapa"
+                android:layout_marginTop="21dp">
+
+            <Button
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="Guardar"
+                    android:backgroundTint="@color/backgroundApp"/>
+
+            <Button
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="Editar"
+                    android:layout_marginLeft="15dp"
+                    android:backgroundTint="@color/backgroundApp"/>
+
+            <Button
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="Borrar"
+                    android:layout_marginLeft="15dp"
+                    android:backgroundTint="@color/backgroundApp"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</FrameLayout>
