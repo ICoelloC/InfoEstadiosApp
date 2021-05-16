@@ -541,7 +541,6 @@ class EstadioDetalleFragment(
             "Seleccionar fotografía de galería",
             "Capturar fotografía desde la cámara"
         )
-        // Creamos el dialog con su builder
         AlertDialog.Builder(context)
             .setTitle("Seleccionar Acción")
             .setItems(fotoDialogoItems) { dialog, modo ->
@@ -585,8 +584,6 @@ class EstadioDetalleFragment(
                 // Obtenemos su URI con su dirección temporal
                 val contentURI = data.data!!
                 try {
-                    // Obtenemos el bitmap de su almacenamiento externo
-                    // Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
                     if (Build.VERSION.SDK_INT < 28) {
                         this.FOTO =
                             MediaStore.Images.Media.getBitmap(context?.contentResolver, contentURI)
@@ -624,9 +621,7 @@ class EstadioDetalleFragment(
                     Toast.makeText(context, "¡Fallo Galeria!", Toast.LENGTH_SHORT).show()
                 }
             }
-        } else if (requestCode == CAMARA) {
-            Log.i("FOTO", "Entramos en Camara")
-            // Cogemos la imagen, pero podemos coger la imagen o su modo en baja calidad (thumbnail)
+        } else if (requestCode == CAMARA) {// Cogemos la imagen, pero podemos coger la imagen o su modo en baja calidad (thumbnail)
             try {
                 if (Build.VERSION.SDK_INT < 28) {
                     this.FOTO =
@@ -636,10 +631,8 @@ class EstadioDetalleFragment(
                         ImageDecoder.createSource(context?.contentResolver!!, IMAGEN_URI)
                     this.FOTO = ImageDecoder.decodeBitmap(source)
                 }
-                // Comprimimos la foto
                 Log.i("Camara", IMAGEN_URI.path.toString())
                 Fotos.comprimirFoto(IMAGEN_URI.toFile(), this.FOTO, this.IMAGEN_COMPRESION)
-                // Mostramos
                 detalleEstadioImagen.setImageBitmap(this.FOTO)
                 Toast.makeText(context, "¡Foto Salvada!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
