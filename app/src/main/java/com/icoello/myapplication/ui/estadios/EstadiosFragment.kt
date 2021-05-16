@@ -1,10 +1,9 @@
-package com.icoello.myapplication.ui.home
+package com.icoello.myapplication.ui.estadios
 
 import android.app.Activity
 import android.content.Intent
 import android.graphics.*
 import android.os.Bundle
-import android.text.TextUtils.indexOf
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +14,6 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.common.collect.Iterables.indexOf
-import com.google.common.collect.Iterators.indexOf
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -65,7 +62,6 @@ class EstadiosFragment : Fragment() {
         iniciarSwipeRecarga()
         cargarEstadios()
         iniciarSwipeHorizontal()
-
         estadiosRecycler.layoutManager = LinearLayoutManager(context)
         estadiosFabNuevo.setOnClickListener { nuevoElemento() }
 
@@ -81,14 +77,15 @@ class EstadiosFragment : Fragment() {
     }
 
     private fun iniciarSwipeHorizontal() {
-        val simpleItemToucgCallback: ItemTouchHelper.SimpleCallback =
-            object :
-                ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-
+        val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback =
+            object : ItemTouchHelper.SimpleCallback(
+                0, ItemTouchHelper.LEFT or
+                        ItemTouchHelper.RIGHT
+            ) {
                 override fun onMove(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
+                    target: RecyclerView.ViewHolder,
                 ): Boolean {
                     return false
                 }
@@ -112,7 +109,7 @@ class EstadiosFragment : Fragment() {
                     dX: Float,
                     dY: Float,
                     actionState: Int,
-                    isCurrentlyActive: Boolean
+                    isCurrentlyActive: Boolean,
                 ) {
                     if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                         val itemView = viewHolder.itemView
@@ -135,7 +132,8 @@ class EstadiosFragment : Fragment() {
                     )
                 }
             }
-        val itemTouchHelper = ItemTouchHelper(simpleItemToucgCallback)
+        // Añadimos los eventos al RV
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(estadiosRecycler)
     }
 
@@ -172,49 +170,49 @@ class EstadiosFragment : Fragment() {
         canvas.drawBitmap(icon, null, iconDest, paintSweep)
     }
 
-    private fun nuevoElemento(){
+    private fun nuevoElemento() {
         Log.i(TAG, "Nuevo estadio")
-        abrirDetalle(null)
+        abrirDetalle(null, Modo.INSERTAR)
     }
 
-    private fun insertarItemLista(item: Estadio){
+    private fun insertarItemLista(item: Estadio) {
         this.estadiosAdapter.addItem(item)
         estadiosAdapter.notifyDataSetChanged()
     }
 
-    private fun editarElemento(position: Int){
+    private fun editarElemento(position: Int) {
         Log.i(TAG, "Editando el elemento pos: $position")
         actualizarVistaLista()
-        abrirDetalle(ESTADIOS[position])
+        abrirDetalle(ESTADIOS[position], Modo.ACTUALIZAR)
     }
 
-    private fun actualizarItemLista(item: Estadio, position: Int){
+    private fun actualizarItemLista(item: Estadio, position: Int) {
         this.estadiosAdapter.updateItem(item, position)
         estadiosAdapter.notifyDataSetChanged()
     }
 
-    private fun borrarElemento(position: Int){
+    private fun borrarElemento(position: Int) {
         Log.i(TAG, "Borrando el elemento pos: $position")
-        abrirDetalle(ESTADIOS[position])
+        abrirDetalle(ESTADIOS[position], Modo.ELIMINAR)
     }
 
-    private fun eliminarItemLista(position: Int){
+    private fun eliminarItemLista(position: Int) {
         this.estadiosAdapter.removeItem(position)
         estadiosAdapter.notifyDataSetChanged()
     }
 
-    private fun actualizarVistaLista(){
+    private fun actualizarVistaLista() {
         estadiosRecycler.adapter = estadiosAdapter
     }
 
-    private fun abrirElemento(estadio: Estadio){
+    private fun abrirElemento(estadio: Estadio) {
         Log.i(TAG, "Visualizando el elemento: ${estadio.id}")
-        abrirDetalle(estadio)
+        abrirDetalle(estadio, Modo.VISUALIZA)
     }
 
-    private fun abrirDetalle(estadio: Estadio?) {
+    private fun abrirDetalle(estadio: Estadio?, modo: Modo?) {
         Log.i("Estadios", "Abriendo el elemento pos: " + estadio?.id)
-        val estadioDetalle = EstadioDetalle(estadio)
+        val estadioDetalle = EstadioDetalle(estadio, modo)
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         transaction.add(R.id.nav_host_fragment, estadioDetalle)
@@ -223,7 +221,7 @@ class EstadiosFragment : Fragment() {
         actualizarVistaLista()
     }
 
-    private fun eventoClicFila(estadio: Estadio){
+    private fun eventoClicFila(estadio: Estadio) {
         abrirElemento(estadio)
     }
 
@@ -241,8 +239,8 @@ class EstadiosFragment : Fragment() {
             eventoClicFila(it)
         }
         estadiosRecycler.adapter = estadiosAdapter
-        Toast.makeText(context, "Obteniendo estadios", Toast.LENGTH_LONG).show()
-        FireStore.collection("estadios")
+        Toast.makeText(context, "Obteniendo lugares", Toast.LENGTH_LONG).show()
+        FireStore.collection("lugares")
             .addSnapshotListener { value, e ->
                 if (e != null) {
                     Toast.makeText(
@@ -253,6 +251,7 @@ class EstadiosFragment : Fragment() {
                         .show()
                     return@addSnapshotListener
                 }
+                // LUGARES.clear()
                 estadiosSwipeRefresh.isRefreshing = false
                 for (doc in value!!.documentChanges) {
                     when (doc.type) {
@@ -275,8 +274,7 @@ class EstadiosFragment : Fragment() {
 
     private fun eliminarDocumento(doc: Map<String, Any>) {
         val miEstadio = documentToEstadio(doc)
-        Log.i(TAG, "Elimando lugar: ${miEstadio.id}")
-        // Buscamos que esté
+        Log.i(TAG, "Eliminando lugar: ${miEstadio.id}")
         val index = ESTADIOS.indexOf(miEstadio)
         if (index >= 0)
             eliminarItemLista(index)
@@ -285,7 +283,6 @@ class EstadiosFragment : Fragment() {
     private fun modificarDocumento(doc: Map<String, Any>) {
         val miEstadio = documentToEstadio(doc)
         Log.i(TAG, "Modificando lugar: ${miEstadio.id}")
-        // Buscamos que esté,
         val index = ESTADIOS.indexOf(miEstadio)
         if (index >= 0)
             actualizarItemLista(miEstadio, index)
@@ -307,19 +304,9 @@ class EstadiosFragment : Fragment() {
     private fun insertarDocumento(doc: MutableMap<String, Any>) {
         val miEstadio = documentToEstadio(doc)
         Log.i(TAG, "Añadiendo lugar: ${miEstadio.id}")
-        // Buscamos que no este... para evitar distintas llamadas de ADD
         val existe = ESTADIOS.any { lugar -> lugar.id == miEstadio.id }
         if (!existe)
             insertarItemLista(miEstadio)
     }
-
-    private fun visualizarListaItems(){
-        try{
-            actualizarVistaLista()
-        }catch (ex:Exception){
-
-        }
-    }
-
 }
 

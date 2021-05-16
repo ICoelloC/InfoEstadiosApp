@@ -1,6 +1,5 @@
-package com.icoello.myapplication.ui.home
+package com.icoello.myapplication.ui.estadios
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,9 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.auth.api.Auth
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.icoello.myapplication.Entidades.Estadio
 import com.icoello.myapplication.R

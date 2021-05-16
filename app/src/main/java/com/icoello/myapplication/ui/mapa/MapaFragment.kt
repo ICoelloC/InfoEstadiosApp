@@ -36,8 +36,6 @@ class MapaFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         private const val TAG = "MAPA"
     }
 
-    private lateinit var mapaViewModel: MapaViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -7,7 +7,7 @@
 
     <fragment
             android:id="@+id/nav_estadios"
-            android:name="com.icoello.myapplication.ui.home.EstadiosFragment"
+            android:name="com.icoello.myapplication.ui.estadios.EstadiosFragment"
             android:label="@string/menu_home"
             tools:layout="@layout/fragment_estadios" />
 
@@ -24,7 +24,7 @@
             tools:layout="@layout/fragment_perfil" />
     <fragment
             android:id="@+id/estadioDetalle"
-            android:name="com.icoello.myapplication.ui.home.EstadioDetalle"
+            android:name="com.icoello.myapplication.ui.estadios.EstadioDetalle"
             android:label="EstadioDetalle" />
     <fragment
             android:id="@+id/linternaFragment"

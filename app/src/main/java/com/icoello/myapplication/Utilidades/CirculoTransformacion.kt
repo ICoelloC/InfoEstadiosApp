@@ -3,6 +3,9 @@ package com.icoello.myapplication.Utilidades
 import android.graphics.*
 import com.squareup.picasso.Transformation
 
+/**
+ * Clase de trasformación para las imagen Picasso
+ */
 class CirculoTransformacion : Transformation {
     var mCircleSeparator = false
     var color = "#ffffff"

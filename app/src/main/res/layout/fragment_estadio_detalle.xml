@@ -102,7 +102,7 @@
                     android:text="100 seguidores"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:id="@+id/detalleLugarTextVotos"
+                    android:id="@+id/detalleEstadioSeguidores"
                     android:layout_weight="1"
                     android:textColor="@color/white"
                     android:clickable="false"
@@ -134,21 +134,24 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:text="Guardar"
-                    android:backgroundTint="@color/backgroundApp"/>
+                    android:backgroundTint="@color/backgroundApp"
+                    android:id="@+id/detalleEstadioGuardarBtn" />
 
             <Button
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:text="Editar"
                     android:layout_marginLeft="15dp"
-                    android:backgroundTint="@color/backgroundApp"/>
+                    android:backgroundTint="@color/backgroundApp"
+                    android:id="@+id/detalleEstadioEditarBtn" />
 
             <Button
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:text="Borrar"
                     android:layout_marginLeft="15dp"
-                    android:backgroundTint="@color/backgroundApp"/>
+                    android:backgroundTint="@color/backgroundApp"
+                    android:id="@+id/detalleEstadioBorrarBtn" />
 
         </LinearLayout>
     </RelativeLayout>
