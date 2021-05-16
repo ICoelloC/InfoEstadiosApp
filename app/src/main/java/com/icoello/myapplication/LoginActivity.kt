@@ -2,6 +2,7 @@ package com.icoello.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -12,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -19,23 +21,26 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.icoello.myapplication.Entidades.Usuario
+import com.icoello.myapplication.Utilidades.UtilEncryptor
+import com.icoello.myapplication.Utilidades.Utils
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var loginEmail: EditText
-    private lateinit var loginPassword: EditText
-    private lateinit var loginLoginButton: Button
-    private lateinit var loginGoogleLoginButton: Button
-    private lateinit var loginGoRegisterButton: Button
-
-    private lateinit var Auth: FirebaseAuth
-    private lateinit var  FireStore: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val Rc_SIGN_IN = 9001
 
-    private  val googleSignIn = 300
+    private val googleSignIn = 300
 
-    companion object{
+    var email: String = ""
+    var pass: String = ""
+
+    enum class ProviderType{
+        BASIC,
+        GOOGLE
+    }
+
+    companion object {
         private const val TAG = "Login"
     }
 
@@ -43,53 +48,110 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        auth = Firebase.auth
+        initGoogle()
+        loginLoginButton.setOnClickListener {
+            login()
+        }
+        loginGoogleLoginButton.setOnClickListener {
+            loginGoogle()
+        }
+        loginGoRegisterButton.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+            finish()
+        }
 
-        Auth = Firebase.auth
-        FireStore = FirebaseFirestore.getInstance()
+    }
+
+    private fun initGoogle(){
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient.signOut()
+    }
 
-        initUI()
-
+    private fun loginGoogle(){
+        val signInIntent: Intent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, googleSignIn)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == Rc_SIGN_IN){
+        if (requestCode == googleSignIn) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try{
+            try {
                 val account = task.getResult(ApiException::class.java)!!
+                Log.d("FIREBASE", "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
-            }catch (e: ApiException){
-                Toast.makeText(baseContext, "Error: " + e.localizedMessage,
-                    Toast.LENGTH_SHORT).show()
+            } catch (e: ApiException) {
+                // Google Sign In failed, update UI appropriately
+                Log.w("FIREBASE", "Google sign in failed")
             }
-
         }
 
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        Auth.signInWithCredential(credential)
+        auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful){
-                    val user = Auth.currentUser
-                    Log.i(TAG, user.toString())
-                    Toast.makeText(baseContext, "Auth: Usuario autenticado en Google", Toast.LENGTH_LONG).show()
-                    user?.let { insertarUsuario(it) }
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("fairebase", "signInWithCredential:success")
+                    val user = auth.currentUser
                     abrirMain()
-                }else{
-                    Log.w(TAG, "signInWithCredential: Error", task.exception)
-                    Toast.makeText(baseContext, "Error: " + task.exception?.localizedMessage, Toast.LENGTH_SHORT).show()
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("fairebase", "signInWithCredential:failure", task.exception)
                 }
             }
     }
 
+    private fun login(){
+        email = loginEmail.text.toString().trim()
+        pass = UtilEncryptor.encrypt(loginPassword.text.toString().trim())!!
+
+        if (checkEmpty(email, pass)){
+            if (Utils.isNetworkAvailable(this)) {
+                userExists(email, pass)
+            } else {
+                val snackbar = Snackbar.make(
+                    findViewById(android.R.id.content),
+                    R.string.no_net,
+                    Snackbar.LENGTH_INDEFINITE
+                )
+                snackbar.setActionTextColor(getColor(R.color.accent))
+                snackbar.setAction("Conectar") {
+                    val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
+                    startActivity(intent)
+                    finish()
+                }
+                snackbar.show()
+            }
+            Log.i("realm", "usuario logeado")
+        }
+    }
+
+    private fun userExists(email: String, password: String){
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.i("fairbase", "signInWithEmail:success")
+                    val user = auth.currentUser
+                    Log.i("fairbase", user.toString())
+                    abrirMain()
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("fairbase", "signInWithEmail:failure", task.exception)
+                    loginEmail.error = resources.getString(R.string.userNotCorrect)
+                }
+
+            }
+    }
+/*
     private fun insertarUsuario(user: FirebaseUser) {
         val usuario = Usuario(
             id = user.uid,
@@ -154,13 +216,13 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
     }
-
+*/
     private fun abrirMain() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 
-    private fun showErrorAlert(message:String){
+    private fun showErrorAlert(message: String) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error")
         builder.setMessage(message)

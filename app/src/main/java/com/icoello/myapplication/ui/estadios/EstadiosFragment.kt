@@ -239,8 +239,8 @@ class EstadiosFragment : Fragment() {
             eventoClicFila(it)
         }
         estadiosRecycler.adapter = estadiosAdapter
-        Toast.makeText(context, "Obteniendo lugares", Toast.LENGTH_LONG).show()
-        FireStore.collection("lugares")
+        Toast.makeText(context, "Obteniendo estadios", Toast.LENGTH_LONG).show()
+        FireStore.collection("estadios")
             .addSnapshotListener { value, e ->
                 if (e != null) {
                     Toast.makeText(

@@ -71,7 +71,24 @@ class EstadiosListAdapter(
     }
 
     private fun imagenEstadio(estadio: Estadio, holder: EstadiosViewHolder) {
-
+        /*
+        val docRef = FireStore.collection("estadios").document(estadio.id)
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null){
+                    val miImagen = document.toObject(Estadio::class.java)
+                    Picasso.get()
+                        .load(miImagen?.foto)
+                        .into(holder.itemFoto)
+                }else{
+                    imagenPorDefecto(holder)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "ERROR: " + exception.localizedMessage)
+                imagenPorDefecto(holder)
+            }
+        */
         if (estadio.foto != "") {
             Picasso.get()
                 .load(estadio?.foto)
@@ -104,10 +121,12 @@ class EstadiosListAdapter(
     private fun actualizarEstadioSeguidores(estadio: Estadio, holder: EstadiosViewHolder) {
         var estadioRef = FireStore.collection("estadios").document(estadio.id)
         estadioRef
-            .update(mapOf(
-                "seguidores" to estadio.seguidores,
-                "seguido" to estadio.seguido
-            ))
+            .update(
+                mapOf(
+                    "seguidores" to estadio.seguidores,
+                    "seguido" to estadio.seguido
+                )
+            )
             .addOnSuccessListener {
                 Log.i(TAG, "lugarUpdate ok")
             }.addOnFailureListener { e -> Log.w(TAG, "Error actualiza votos", e) }
@@ -122,7 +141,7 @@ class EstadiosListAdapter(
                 AppCompatResources.getColorStateList(holder.context, R.color.seguirOff)
     }
 
-    class EstadiosViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class EstadiosViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var itemFoto: ImageView = itemView.itemEstadioFoto
         var itemNombre: TextView = itemView.itemEstadioNombre
         var itemSeguidores: TextView = itemView.itemEstadioSeguidores

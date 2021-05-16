@@ -31,4 +31,16 @@
     <string name="Encender">Encender</string>
     <string name="google_maps_key">AIzaSyDWf0kbb7iH44L4pkFchvaoWyQfuN-ET6I</string>
     <string name="cancelar">Cancelar</string>
+    <string name="no_net">Error, sin conexion a internet</string>
+    <string name="email_incorrecto">Correo invalido</string>
+    <string name="isEmpty">Vacío</string>
+    <string name="Gallery">Galeria</string>
+    <string name="Photo">Cámara</string>
+    <string name="SelectOption">Selecciona una opción</string>
+    <string name="need_camera">necesitas camara</string>
+    <string name="error_camera">Error con la camara</string>
+    <string name="error_gallery">Error con la galeria</string>
+    <string name="isAlreadyExist">Ya esta registrado este correo</string>
+    <string name="need_gallery">Sin permisos de galeria</string>
+    <string name="userNotCorrect">Correo o contraseña invalidos</string>
 </resources>

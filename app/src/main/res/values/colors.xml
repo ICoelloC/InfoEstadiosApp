@@ -23,5 +23,6 @@
     <color name="seguirOff">#F6EBEA</color>
     <color name="seguirOn">#EF695D</color>
     <color name="colorAccent">#326F3A</color>
+    <color name="accent">#CF1B0E</color>
 
 </resources>
