@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">InfoEstadios</string>
+    <string name="email">mail</string>
+    <string name="login">Log in</string>
+    <string name="contrasenia">password</string>
+    <string name="login_google">log in google</string>
+    <string name="registrarse">Register</string>
+    <string name="repite_contrasenia">repeat password</string>
+    <string name="menu_home">Stadiums</string>
+    <string name="menu_gallery">Map</string>
+    <string name="menu_slideshow">Info</string>
+    <string name="username">username</string>
+    <string name="menu_estadio">Stadiums</string>
+    <string name="menu_mapa">Map</string>
+    <string name="menu_perfil">My profile</string>
+    <string name="linterna">Flashlight</string>
+    <string name="aceptar">OK</string>
+    <string name="Encender">Turn On</string>
+    <string name="cancelar">Cancel</string>
+    <string name="no_net">Error, no internet available</string>
+    <string name="email_incorrecto">Invalid mail</string>
+    <string name="isEmpty">Empty</string>
+    <string name="Gallery">Gallery</string>
+    <string name="Photo">Camera</string>
+    <string name="SelectOption">Choose an option</string>
+    <string name="need_camera">you need camera</string>
+    <string name="error_camera">error with camera</string>
+    <string name="error_gallery">error with gallery</string>
+    <string name="isAlreadyExist">Email already registered</string>
+    <string name="need_gallery">Without gallery permissions</string>
+    <string name="userNotCorrect">Mail or password invalid</string>
+</resources>
