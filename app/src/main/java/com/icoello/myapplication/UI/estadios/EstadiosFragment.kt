@@ -1,4 +1,4 @@
-package com.icoello.myapplication.ui.estadios
+package com.icoello.myapplication.UI.estadios
 
 import android.app.Activity
 import android.content.Intent
@@ -144,7 +144,7 @@ class EstadiosFragment : Fragment() {
             itemView.top.toFloat(), itemView.right.toFloat(), itemView.bottom.toFloat()
         )
         canvas.drawRect(background, paintSweep)
-        val icon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_delete)
+        val icon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.delete)
         val iconDest = RectF(
             itemView.right.toFloat() - 2 * width,
             itemView.top.toFloat() + width,
@@ -160,7 +160,7 @@ class EstadiosFragment : Fragment() {
             itemView.left.toFloat(), itemView.top.toFloat(), dX, itemView.bottom.toFloat()
         )
         canvas.drawRect(background, paintSweep)
-        val icon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_edit)
+        val icon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.edit)
         val iconDest = RectF(
             itemView.left.toFloat() + width,
             itemView.top.toFloat() + width,
@@ -212,7 +212,7 @@ class EstadiosFragment : Fragment() {
 
     private fun abrirDetalle(estadio: Estadio?, modo: Modo?) {
         Log.i("Estadios", "Abriendo el elemento pos: " + estadio?.id)
-        val estadioDetalle = EstadioDetalle(estadio, modo)
+        val estadioDetalle = EstadioDetalleFragment(estadio, modo)
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         transaction.add(R.id.nav_host_fragment, estadioDetalle)

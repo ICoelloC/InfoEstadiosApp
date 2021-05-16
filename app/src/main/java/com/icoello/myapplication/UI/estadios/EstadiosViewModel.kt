@@ -1,4 +1,4 @@
-package com.icoello.myapplication.ui.estadios
+package com.icoello.myapplication.UI.estadios
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

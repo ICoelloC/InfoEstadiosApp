@@ -1,4 +1,4 @@
-package com.icoello.myapplication.ui.mapa
+package com.icoello.myapplication.UI.mapa
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds

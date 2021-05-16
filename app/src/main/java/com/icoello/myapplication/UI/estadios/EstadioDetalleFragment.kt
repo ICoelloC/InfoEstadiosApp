@@ -1,10 +1,8 @@
-package com.icoello.myapplication.ui.estadios
+package com.icoello.myapplication.UI.estadios
 
-import android.Manifest
 import android.app.Activity.RESULT_CANCELED
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -21,8 +19,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.net.toFile
+import androidx.core.view.isVisible
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
@@ -43,10 +41,11 @@ import com.icoello.myapplication.Entidades.Estadio
 import com.icoello.myapplication.R
 import com.icoello.myapplication.Utilidades.Fotos
 import kotlinx.android.synthetic.main.fragment_estadio_detalle.*
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.*
 
-class EstadioDetalle(
+class EstadioDetalleFragment(
     private var ESTADIO: Estadio? = null,
     private val MODO: Modo? = Modo.INSERTAR
 ) : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -84,7 +83,7 @@ class EstadioDetalle(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        Log.i("DETALLE", ESTADIO.toString())
         return inflater.inflate(R.layout.fragment_estadio_detalle, container, false)
     }
 
@@ -98,7 +97,6 @@ class EstadioDetalle(
             return@setOnTouchListener true
         }
         initIU()
-
     }
 
     private fun initIU() {
@@ -126,7 +124,6 @@ class EstadioDetalle(
 
     private fun initModoInsertar() {
         Log.i("Estadios", "Modo Insertar")
-        detalleEstadioSeguidores.visibility = View.GONE
         detalleEstadioInputNombre.setText("")
         detalleEstadioSeguidores.text = "0 seguidores"
         detalleEstadioEditarBtn.visibility = View.GONE
@@ -138,20 +135,21 @@ class EstadioDetalle(
 
     private fun initModoVisualizar() {
         Log.i("Estadios", "Modo Visualizar")
+
+        detalleEstadioFabCamara.isVisible = false
+        detalleEstadioBorrarBtn.isVisible = false
+        detalleEstadioGuardarBtn.isVisible = false
+        detalleEstadioEditarBtn.isVisible = false
+        detalleEstadioSeguidores.isVisible = false
+
         detalleEstadioInputNombre.setText(ESTADIO?.nombre)
         detalleEstadioInputNombre.isEnabled = false
-        detalleEstadioSeguidores.text = ESTADIO?.seguidores.toString() + " seguidores"
-        (ESTADIO?.capacidad)?.let { detalleEstadioInputCapacidad.setText(it.toInt()) }
-        detalleEstadioInputCapacidad.isEnabled = false
+
         detalleEstadioInputEquipo.setText(ESTADIO?.equipo)
-        detalleEstadioEditarBtn.visibility = View.GONE
-        detalleEstadioBorrarBtn.visibility = View.GONE
-        detalleEstadioGuardarBtn.visibility = View.GONE
-        detalleEstadioFabCamara.visibility = View.GONE
-    }
+        detalleEstadioInputEquipo.isEnabled = false
 
-    private fun cagarFotografia() {
-
+        detalleEstadioInputCapacidad.setText(ESTADIO?.capacidad.toString())
+        detalleEstadioInputCapacidad.isEnabled = false
     }
 
     private fun imagenPorDefecto() {
@@ -166,7 +164,7 @@ class EstadioDetalle(
     private fun initModoEliminar() {
         Log.i("Estadios", "Modo Eliminar")
         initModoVisualizar()
-        detalleEstadioBorrarBtn.visibility = View.GONE
+        detalleEstadioBorrarBtn.visibility = View.VISIBLE
         detalleEstadioBorrarBtn.setOnClickListener { eliminarEstadio() }
     }
 
@@ -210,7 +208,7 @@ class EstadioDetalle(
                 insertarFoto()
                 Log.i(TAG, "Estadio insertado con éxito con id: $ESTADIO")
             }
-            .addOnFailureListener { e -> Log.w(TAG, "Error insertar lugar", e) }
+            .addOnFailureListener { e -> Log.w(TAG, "Error insertar estadio", e) }
     }
 
     private fun insertarFoto() {
@@ -245,25 +243,47 @@ class EstadioDetalle(
             equipo = detalleEstadioInputEquipo.text.toString().trim()
             latitud = posicion?.latitude.toString()
             longitud = posicion?.longitude.toString()
-            capacidad = (detalleEstadioInputCapacidad.toString().trim()).toInt()
         }
         FireStore.collection("estadios")
             .document(ESTADIO!!.id)
             .set(ESTADIO!!)
             .addOnSuccessListener {
                 Log.i(TAG, "Estadio actualizado con éxito con id: " + ESTADIO!!.id)
-                /*
                 if (IMAGEN_URI.toString() != detalleEstadioImagen.toString()) {
-                    actualizarFotografia()
+                    actualizarFoto()
                 } else {
-                    Snackbar.make(view!!, "¡Lugar actualizado con éxito!", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(requireView(), "¡Estadio modificado!", Snackbar.LENGTH_LONG).show()
                     volver()
                 }
-                 */
             }
     }
 
-    private fun volver(){
+    private fun actualizarFoto() {
+        val storageRef = Storage.reference
+        val baos = ByteArrayOutputStream()
+        FOTO.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+        // no hace falta borrarla si no solo sobre escribirla
+        val estadioImagenRef = storageRef.child("images/${ESTADIO?.nombre}.jpg")
+        val uploadTask = estadioImagenRef.putBytes(data)
+        uploadTask.addOnFailureListener{
+            Log.i(TAG, "storage:failure: " + it.localizedMessage)
+        }.addOnSuccessListener { taskSnapshot ->
+            val downloadUti = taskSnapshot.metadata!!.reference!!.downloadUrl
+            downloadUti.addOnSuccessListener {
+                val fotoRef = FireStore.collection("estadios").document(ESTADIO?.id.toString())
+                fotoRef.update("foto", it.toString())
+                    .addOnSuccessListener {
+                        volver()
+                    }
+                    .addOnFailureListener { e->
+                        Log.w(TAG, "Error actualizar imagen", e)
+                    }
+            }
+        }
+    }
+
+    private fun volver() {
         activity?.onBackPressed()
     }
 
@@ -476,7 +496,7 @@ class EstadioDetalle(
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.i("FOTO", "Opción:--->$requestCode")
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == RESULT_CANCELED){
+        if (resultCode == RESULT_CANCELED) {
             Log.i("FOTO", "Se ha cancelado")
         }
         if (requestCode == GALERIA) {
@@ -488,7 +508,8 @@ class EstadioDetalle(
                     // Obtenemos el bitmap de su almacenamiento externo
                     // Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
                     if (Build.VERSION.SDK_INT < 28) {
-                        this.FOTO = MediaStore.Images.Media.getBitmap(context?.contentResolver, contentURI)
+                        this.FOTO =
+                            MediaStore.Images.Media.getBitmap(context?.contentResolver, contentURI)
                     } else {
                         val source: ImageDecoder.Source =
                             ImageDecoder.createSource(context?.contentResolver!!, contentURI)
@@ -506,9 +527,16 @@ class EstadioDetalle(
                     // Vamos a copiar nuestra imagen en nuestro directorio comprimida por si acaso.
                     val nombre = Fotos.crearNombreFoto(IMAGEN_PREFIJO, IMAGEN_EXTENSION)
                     val fichero =
-                        Fotos.copiarFoto(this.FOTO, nombre, IMAGEN_DIRECTORY, IMAGEN_COMPRESION, requireContext())
+                        Fotos.copiarFoto(
+                            this.FOTO,
+                            nombre,
+                            IMAGEN_DIRECTORY,
+                            IMAGEN_COMPRESION,
+                            requireContext()
+                        )
                     IMAGEN_URI = Uri.fromFile(fichero)
-                    Toast.makeText(context, "¡Foto rescatada de la galería!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "¡Foto rescatada de la galería!", Toast.LENGTH_SHORT)
+                        .show()
                     detalleEstadioImagen.setImageBitmap(this.FOTO)
 
                 } catch (e: IOException) {
@@ -521,9 +549,11 @@ class EstadioDetalle(
             // Cogemos la imagen, pero podemos coger la imagen o su modo en baja calidad (thumbnail)
             try {
                 if (Build.VERSION.SDK_INT < 28) {
-                    this.FOTO = MediaStore.Images.Media.getBitmap(context?.contentResolver, IMAGEN_URI)
+                    this.FOTO =
+                        MediaStore.Images.Media.getBitmap(context?.contentResolver, IMAGEN_URI)
                 } else {
-                    val source: ImageDecoder.Source = ImageDecoder.createSource(context?.contentResolver!!, IMAGEN_URI)
+                    val source: ImageDecoder.Source =
+                        ImageDecoder.createSource(context?.contentResolver!!, IMAGEN_URI)
                     this.FOTO = ImageDecoder.decodeBitmap(source)
                 }
                 // Comprimimos la foto

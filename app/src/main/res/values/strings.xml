@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">InfoEstadiosApp</string>
+    <string name="app_name">InfoEstadios</string>
     <string name="email">email</string>
     <string name="login">Log in</string>
     <string name="contrasenia">contraseña</string>
@@ -43,4 +43,5 @@
     <string name="isAlreadyExist">Ya esta registrado este correo</string>
     <string name="need_gallery">Sin permisos de galeria</string>
     <string name="userNotCorrect">Correo o contraseña invalidos</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

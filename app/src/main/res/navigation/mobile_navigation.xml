@@ -7,27 +7,29 @@
 
     <fragment
             android:id="@+id/nav_estadios"
-            android:name="com.icoello.myapplication.ui.estadios.EstadiosFragment"
+            android:name="com.icoello.myapplication.UI.estadios.EstadiosFragment"
             android:label="@string/menu_home"
             tools:layout="@layout/fragment_estadios" />
 
     <fragment
             android:id="@+id/nav_mapa"
-            android:name="com.icoello.myapplication.ui.mapa.MapaFragment"
+            android:name="com.icoello.myapplication.UI.mapa.MapaFragment"
             android:label="@string/menu_gallery"
             tools:layout="@layout/fragment_mapa" />
 
     <fragment
             android:id="@+id/nav_perfil"
-            android:name="com.icoello.myapplication.ui.perfil.PerfilFragment"
+            android:name="com.icoello.myapplication.UI.perfil.PerfilFragment"
             android:label="@string/menu_slideshow"
             tools:layout="@layout/fragment_perfil" />
     <fragment
             android:id="@+id/estadioDetalle"
-            android:name="com.icoello.myapplication.ui.estadios.EstadioDetalle"
-            android:label="EstadioDetalle" />
+            android:name="com.icoello.myapplication.UI.estadios.EstadioDetalleFragment"
+            android:label="EstadioDetalle"
+            tools:layout="@layout/fragment_estadio_detalle"/>
     <fragment
-            android:id="@+id/linternaFragment"
-            android:name="com.icoello.myapplication.ui.linterna.LinternaFragment"
-            android:label="LinternaFragment" />
+            android:id="@+id/nav_linterna"
+            android:name="com.icoello.myapplication.UI.linterna.LinternaFragment"
+            android:label="LinternaFragment"
+            tools:layout="@layout/fragment_linterna"/>
 </navigation>

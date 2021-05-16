@@ -1,4 +1,4 @@
-package com.icoello.myapplication.ui.linterna
+package com.icoello.myapplication.UI.linterna
 
 import android.app.AlertDialog
 import android.content.Context

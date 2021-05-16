@@ -1,4 +1,4 @@
-package com.icoello.myapplication.ui.perfil
+package com.icoello.myapplication.UI.perfil
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

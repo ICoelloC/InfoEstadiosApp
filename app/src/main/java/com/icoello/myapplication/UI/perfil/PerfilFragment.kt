@@ -1,20 +1,15 @@
-package com.icoello.myapplication.ui.perfil
+package com.icoello.myapplication.UI.perfil
 
 import android.app.AlertDialog
-import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.auth.api.Auth
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -23,7 +18,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.icoello.myapplication.R
-import com.icoello.myapplication.estadiosivan.ProviderType
 
 class PerfilFragment() : Fragment() {
 

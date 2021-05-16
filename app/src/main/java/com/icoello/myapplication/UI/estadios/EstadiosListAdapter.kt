@@ -1,4 +1,4 @@
-package com.icoello.myapplication.ui.estadios
+package com.icoello.myapplication.UI.estadios
 
 import android.graphics.BitmapFactory
 import android.util.Log

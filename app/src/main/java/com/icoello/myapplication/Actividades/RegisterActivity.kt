@@ -1,4 +1,4 @@
-package com.icoello.myapplication
+package com.icoello.myapplication.Actividades
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -23,8 +23,8 @@ import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE
 import com.icoello.myapplication.App.MyApp
+import com.icoello.myapplication.R
 import com.icoello.myapplication.Utilidades.Fotos
 import com.icoello.myapplication.Utilidades.UtilEncryptor
 import com.icoello.myapplication.Utilidades.UtilText

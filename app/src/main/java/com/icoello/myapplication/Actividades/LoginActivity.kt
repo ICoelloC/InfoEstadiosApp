@@ -1,12 +1,9 @@
-package com.icoello.myapplication
+package com.icoello.myapplication.Actividades
 
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -15,12 +12,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.icoello.myapplication.Entidades.Usuario
+import com.icoello.myapplication.R
 import com.icoello.myapplication.Utilidades.UtilEncryptor
 import com.icoello.myapplication.Utilidades.Utils
 import kotlinx.android.synthetic.main.activity_login.*
