@@ -2,6 +2,7 @@ package com.icoello.myapplication.UI.perfil
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -22,7 +23,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.icoello.myapplication.R
+import com.icoello.myapplication.Utilidades.CirculoTransformacion
 import com.icoello.myapplication.Utilidades.UtilEncryptor
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_perfil.*
 
 class PerfilFragment() : Fragment() {
 
@@ -34,6 +38,8 @@ class PerfilFragment() : Fragment() {
     private lateinit var txtEmail: TextView
     private lateinit var txtPassword: TextView
     private lateinit var btnEditar: FloatingActionButton
+    private lateinit var github: ImageView
+    private lateinit var twitter: ImageView
 
     private lateinit var perfilViewModel: PerfilViewModel
 
@@ -55,13 +61,19 @@ class PerfilFragment() : Fragment() {
         perfilFoto = root.findViewById(R.id.perfilFoto)
         txtNombreUsuario = root.findViewById(R.id.perfilUsername)
         txtEmail = root.findViewById(R.id.perfilEmail)
-        txtPassword = root.findViewById(R.id.perfilPassword)
-        btnEditar = root.findViewById(R.id.perfilEditarButton)
+        github = root.findViewById(R.id.perfilGitHub)
+        twitter = root.findViewById(R.id.perfilTwitter)
 
         inicializar(user)
 
-        btnEditar.setOnClickListener {
-            dialogUpdate(user)
+        twitter.setOnClickListener {
+            var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/ICoelloC"))
+            startActivity(intent)
+        }
+
+        github.setOnClickListener {
+            var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ICoelloC"))
+            startActivity(intent)
         }
 
         return root
@@ -172,6 +184,12 @@ class PerfilFragment() : Fragment() {
 
         txtNombreUsuario.text = user.displayName
         txtEmail.text = user.email
+
+        Picasso.get()
+            .load(Auth.currentUser?.photoUrl)
+            .transform(CirculoTransformacion())
+            .resize(130, 130)
+            .into(perfilFoto)
 
 
     }

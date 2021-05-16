@@ -1,8 +1,10 @@
 package com.icoello.myapplication.UI.estadios
 
+import android.Manifest
 import android.app.Activity.RESULT_CANCELED
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -19,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.net.toFile
 import androidx.core.view.isVisible
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -68,7 +71,7 @@ class EstadioDetalleFragment(
 
     private val GALERIA = 1
     private val CAMARA = 2
-    private lateinit var IMAGEN_URI: Uri
+    lateinit var IMAGEN_URI: Uri
     private val IMAGEN_DIRECTORY = "/InfoEstadios"
     private val IMAGEN_PROPORCION = 600
     private lateinit var FOTO: Bitmap
@@ -161,17 +164,21 @@ class EstadioDetalleFragment(
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
+                    if (ESTADIO?.foto != ""){
+                        Picasso.get()
+                            .load(ESTADIO?.foto)
+                            .into(detalleEstadioImagen, object : com.squareup.picasso.Callback {
+                                override fun onSuccess() {
+                                    FOTO = (detalleEstadioImagen.drawable as BitmapDrawable).bitmap
+                                }
+                                override fun onError(ex: Exception?) {
+                                    Log.i(TAG, "Error: Descargar fotografia Picasso")
+                                }
+                            })
+                    }else{
+                        imagenPorDefecto()
+                    }
 
-                    Picasso.get()
-                        .load(ESTADIO?.foto)
-                        .into(detalleEstadioImagen, object : com.squareup.picasso.Callback {
-                            override fun onSuccess() {
-                                FOTO = (detalleEstadioImagen.drawable as BitmapDrawable).bitmap
-                            }
-                            override fun onError(ex: Exception?) {
-                                Log.i(TAG, "Error: Descargar fotografia Picasso")
-                            }
-                        })
                 } else {
                     Log.i(TAG, "Error: No exite fotografía")
                     imagenPorDefecto()
@@ -293,6 +300,7 @@ class EstadioDetalleFragment(
         with(ESTADIO!!) {
             nombre = detalleEstadioInputNombre.text.toString().trim()
             equipo = detalleEstadioInputEquipo.text.toString().trim()
+            capacidad = detalleEstadioInputCapacidad.text.toString().trim().toInt()
             latitud = posicion?.latitude.toString()
             longitud = posicion?.longitude.toString()
         }
@@ -428,6 +436,16 @@ class EstadioDetalleFragment(
     private fun mapaInsertar() {
         Log.i("Mapa", "Configurando Modo Insertar")
         if (this.PERMISOS) {
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
             mMap.isMyLocationEnabled = true
         }
         activarEventosMarcadores()
@@ -450,6 +468,16 @@ class EstadioDetalleFragment(
     private fun mapaActualizar() {
         Log.i("Mapa", "Configurando Modo Actualizar")
         if (this.PERMISOS) {
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
             mMap.isMyLocationEnabled = true
         }
         activarEventosMarcadores()

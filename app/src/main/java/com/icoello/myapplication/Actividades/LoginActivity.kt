@@ -12,9 +12,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.icoello.myapplication.Entidades.Usuario
 import com.icoello.myapplication.R
 import com.icoello.myapplication.Utilidades.UtilEncryptor
 import com.icoello.myapplication.Utilidades.Utils
@@ -24,8 +27,9 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var FireStore: FirebaseFirestore
 
-    private val googleSignIn = 300
+    private val googleSignIn = 9001
 
     var email: String = ""
     var pass: String = ""
@@ -94,14 +98,29 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d("fairebase", "signInWithCredential:success")
+                    Log.d("FIREBASE", "signInWithCredential:success")
                     val user = auth.currentUser
+                    user?.let { insertarUsuario(it) }
                     abrirMain()
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w("fairebase", "signInWithCredential:failure", task.exception)
+                    Log.w("FIREBASE", "signInWithCredential:failure", task.exception)
                 }
             }
+    }
+
+    private fun insertarUsuario(user: FirebaseUser) {
+        val usuario = Usuario(
+            id = user.uid,
+            username = user.displayName.toString(),
+            correo = user.email.toString(),
+            foto = user.photoUrl.toString()
+        )
+        FireStore.collection("usuarios")
+            .document(usuario.id)
+            .set(usuario)
+            .addOnSuccessListener { Log.i(TAG, "Usuario insertado!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error insertar usuario", e) }
     }
 
     private fun login(){
