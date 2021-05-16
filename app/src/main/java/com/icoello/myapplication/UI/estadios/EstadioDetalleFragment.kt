@@ -40,9 +40,11 @@ import com.icoello.myapplication.App.MyApp
 import com.icoello.myapplication.Entidades.Estadio
 import com.icoello.myapplication.R
 import com.icoello.myapplication.Utilidades.Fotos
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_estadio_detalle.*
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.time.Instant
 import java.util.*
 
 class EstadioDetalleFragment(
@@ -150,6 +152,35 @@ class EstadioDetalleFragment(
 
         detalleEstadioInputCapacidad.setText(ESTADIO?.capacidad.toString())
         detalleEstadioInputCapacidad.isEnabled = false
+
+        cargarFoto()
+    }
+
+    private fun cargarFoto() {
+        val docRef = FireStore.collection("estadios").document(ESTADIO?.id.toString())
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+
+                    Picasso.get()
+                        .load(ESTADIO?.foto)
+                        .into(detalleEstadioImagen, object : com.squareup.picasso.Callback {
+                            override fun onSuccess() {
+                                FOTO = (detalleEstadioImagen.drawable as BitmapDrawable).bitmap
+                            }
+                            override fun onError(ex: Exception?) {
+                                Log.i(TAG, "Error: Descargar fotografia Picasso")
+                            }
+                        })
+                } else {
+                    Log.i(TAG, "Error: No exite fotografía")
+                    imagenPorDefecto()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "ERROR: " + exception.localizedMessage)
+                imagenPorDefecto()
+            }
     }
 
     private fun imagenPorDefecto() {
@@ -205,14 +236,35 @@ class EstadioDetalleFragment(
             .document(ESTADIO!!.id)
             .set(ESTADIO!!)
             .addOnSuccessListener {
-                insertarFoto()
                 Log.i(TAG, "Estadio insertado con éxito con id: $ESTADIO")
             }
             .addOnFailureListener { e -> Log.w(TAG, "Error insertar estadio", e) }
+        insertarFoto(ESTADIO!!.nombre)
     }
 
-    private fun insertarFoto() {
-
+    private fun insertarFoto(nombreEstadio: String) {
+        val storageRef = Storage.reference
+        val baos = ByteArrayOutputStream()
+        FOTO.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+        // no hace falta borrarla si no solo sobre escribirla
+        val estadioImagenRef = storageRef.child("images/${nombreEstadio}.jpg")
+        val uploadTask = estadioImagenRef.putBytes(data)
+        uploadTask.addOnFailureListener{
+            Log.i(TAG, "storage:failure: " + it.localizedMessage)
+        }.addOnSuccessListener { taskSnapshot ->
+            val downloadUti = taskSnapshot.metadata!!.reference!!.downloadUrl
+            downloadUti.addOnSuccessListener {
+                val fotoRef = FireStore.collection("estadios").document(ESTADIO?.id.toString())
+                fotoRef.update("foto", it.toString())
+                    .addOnSuccessListener {
+                        volver()
+                    }
+                    .addOnFailureListener { e->
+                        Log.w(TAG, "Error actualizar imagen", e)
+                    }
+            }
+        }
     }
 
     private fun eliminarEstadio() {

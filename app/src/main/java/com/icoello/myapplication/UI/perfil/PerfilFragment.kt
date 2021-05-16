@@ -18,6 +18,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.icoello.myapplication.R
+import com.icoello.myapplication.Utilidades.UtilEncryptor
 
 class PerfilFragment() : Fragment() {
 
@@ -154,7 +155,7 @@ class PerfilFragment() : Fragment() {
             email = txtEmail.text.isNotEmpty().toString()
         }
         if (txtPassword.text.isNotEmpty()) {
-            password = txtPassword.toString()
+            password = UtilEncryptor.encrypt(txtPassword.text.toString()).toString()
         }
     }
 
