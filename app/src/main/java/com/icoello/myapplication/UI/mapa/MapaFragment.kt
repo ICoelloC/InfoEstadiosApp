@@ -1,6 +1,8 @@
 package com.icoello.myapplication.UI.mapa
 
 import android.app.AlertDialog
+import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,11 +11,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -22,6 +23,7 @@ import com.google.firebase.ktx.Firebase
 import com.icoello.myapplication.Entidades.Estadio
 import com.icoello.myapplication.R
 import com.squareup.picasso.Picasso
+import kotlin.math.ceil
 
 class MapaFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -100,7 +102,85 @@ class MapaFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
     }
 
     private fun addMarcador(estadio: Estadio) {
+        // Buscamos la fotografia
+        val docRef = FireStore.collection("estadios").document(estadio.id)
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val posicion = LatLng(estadio.latitud.toDouble(), estadio.longitud.toDouble())
+                    val imageView = ImageView(context)
+                    Picasso.get()
+                        .load(estadio.foto)
+                        .into(imageView, object : com.squareup.picasso.Callback {
+                            override fun onSuccess() {
+                                val temp = (imageView.drawable as BitmapDrawable).bitmap
+                                val pin: Bitmap = crearPin(temp)!!
+                                val marker = mMap.addMarker(
+                                    MarkerOptions() // Posición
+                                        .position(posicion) // Título
+                                        .title(estadio.nombre) // Subtitulo
+                                        .snippet(estadio.equipo + ", capacidad " + estadio.capacidad) // Color o tipo d icono
+                                        .anchor(0.5f, 0.907f)
+                                        .icon(BitmapDescriptorFactory.fromBitmap(pin))
+                                )
+                                // Le añado como tag el lugar para recuperarlo
+                                marker.tag = estadio
+                            }
 
+                            override fun onError(e: Exception) {
+                                Log.d(TAG, "Error al descargar imagen")
+                            }
+                        })
+
+                } else {
+                    Log.i(TAG, "Error: No exite fotografía")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "ERROR: " + exception.localizedMessage)
+            }
+    }
+
+    private fun crearPin(bitmap: Bitmap?): Bitmap? {
+        var result: Bitmap? = null
+        try {
+            result = Bitmap.createBitmap(dp(62f), dp(76f), Bitmap.Config.ARGB_8888)
+            result.eraseColor(Color.TRANSPARENT)
+            val canvas = Canvas(result)
+            val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_location)
+            drawable?.setBounds(0, 0, dp(62f), dp(76f))
+            drawable?.draw(canvas)
+            val roundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+            val bitmapRect = RectF()
+            canvas.save()
+            //Bitmap bitmap = BitmapFactory.decodeFile(path.toString()); /*generate bitmap here if your image comes from any url*/
+            if (bitmap != null) {
+                val shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+                val matrix = Matrix()
+                val scale = dp(52f) / bitmap.width.toFloat()
+                matrix.postTranslate(dp(5f).toFloat(), dp(5f).toFloat())
+                matrix.postScale(scale, scale)
+                roundPaint.shader = shader
+                shader.setLocalMatrix(matrix)
+                bitmapRect[dp(5f).toFloat(), dp(5f).toFloat(), dp(52f + 5).toFloat()] = dp(52f + 5).toFloat()
+                canvas.drawRoundRect(bitmapRect, dp(26f).toFloat(), dp(26f).toFloat(), roundPaint)
+            }
+            canvas.restore()
+            try {
+                canvas.setBitmap(null)
+            } catch (e: Exception) {
+            }
+        } catch (t: Throwable) {
+            t.printStackTrace()
+        }
+        return result
+    }
+
+    private fun dp(value: Float): Int {
+        return if (value == 0f) {
+            0
+        } else
+            ceil((resources.displayMetrics.density * value).toDouble()).toInt()
     }
 
     private fun actualizarCamara(listaEstadios: MutableList<Estadio>?) {
@@ -123,7 +203,6 @@ class MapaFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
 
     override fun onMarkerClick(marker: Marker): Boolean {
         val estadio = marker.tag as Estadio
-        mostrarDialogo(estadio)
         return false
     }
 

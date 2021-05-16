@@ -1,12 +1,15 @@
 package com.icoello.myapplication.UI.perfil
 
 import android.app.AlertDialog
+import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Gallery
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -17,13 +20,14 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.icoello.myapplication.R
 import com.icoello.myapplication.Utilidades.UtilEncryptor
 
 class PerfilFragment() : Fragment() {
 
     val REQUEST_CODE = 200
-    val photoURIUser: String =""
+    val photoURIUser: String = ""
 
     private lateinit var perfilFoto: ImageView
     private lateinit var txtNombreUsuario: TextView
@@ -62,49 +66,50 @@ class PerfilFragment() : Fragment() {
 
         return root
     }
-/*
-    fun changePhoto(){
-        var auth = FirebaseAuth.getInstance()
-        auth.currentUser?.let { user ->
-            var photoURI = Uri.parse(photoURIUser)
-            val profileUpdates = UserProfileChangeRequest.Builder()
-                .setPhotoUri(photoURI)
-                .build()
 
-            user.updateProfile(profileUpdates)
+    /*
+        fun changePhoto(){
+            var auth = FirebaseAuth.getInstance()
+            auth.currentUser?.let { user ->
+                var photoURI = Uri.parse(photoURIUser)
+                val profileUpdates = UserProfileChangeRequest.Builder()
+                    .setPhotoUri(photoURI)
+                    .build()
 
+                user.updateProfile(profileUpdates)
+
+            }
+            showSucced()
         }
-        showSucced()
-    }
 
-    fun changeCredentials(){
-        btnChange.setOnClickListener() {
-            val prefs = this.requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
-            val provider = prefs.getString("provider", null)
+        fun changeCredentials(){
+            btnChange.setOnClickListener() {
+                val prefs = this.requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+                val provider = prefs.getString("provider", null)
 
-            if (provider.equals(ProviderType.BASIC.toString())) {
-                val auth = FirebaseAuth.getInstance()
-                if (txtPassword.text.toString().trim() != "")
-                    changeUserPassword(auth)
-                FireStore.collection("usuarios").document(getString(R.string.prefs_file)).set(
-                    hashMapOf(
-                        "username" to txtNombreUsuario.toString(),
-                        "address" to prefs.getString("email", null),
-                        "provider" to ProviderType.BASIC.toString()
+                if (provider.equals(ProviderType.BASIC.toString())) {
+                    val auth = FirebaseAuth.getInstance()
+                    if (txtPassword.text.toString().trim() != "")
+                        changeUserPassword(auth)
+                    FireStore.collection("usuarios").document(getString(R.string.prefs_file)).set(
+                        hashMapOf(
+                            "username" to txtNombreUsuario.toString(),
+                            "address" to prefs.getString("email", null),
+                            "provider" to ProviderType.BASIC.toString()
+                        )
                     )
-                )
-                showSucced()
-                if (txtNameChange.text.toString().trim() != "")
-                    changeUserName(auth)
-                showSucced()
+                    showSucced()
+                    if (txtNameChange.text.toString().trim() != "")
+                        changeUserName(auth)
+                    showSucced()
 
 
-            }else {
-                showAlert()
+                }else {
+                    showAlert()
+                }
             }
         }
-    }
-*/
+    */
     private fun changeUserName(auth: FirebaseAuth) {
         auth.currentUser?.let { user ->
             val profileUpdates = UserProfileChangeRequest.Builder()
@@ -119,7 +124,7 @@ class PerfilFragment() : Fragment() {
     }
 
 
-    fun changePhoto(){
+    fun changePhoto() {
         var auth = FirebaseAuth.getInstance()
         auth.currentUser?.let { user ->
             var photoURI = Uri.parse(photoURIUser)
@@ -155,7 +160,7 @@ class PerfilFragment() : Fragment() {
             email = txtEmail.text.isNotEmpty().toString()
         }
         if (txtPassword.text.isNotEmpty()) {
-            password = UtilEncryptor.encrypt(txtPassword.text.toString()).toString()
+            password = txtPassword.toString()
         }
     }
 
@@ -167,6 +172,7 @@ class PerfilFragment() : Fragment() {
 
         txtNombreUsuario.text = user.displayName
         txtEmail.text = user.email
+
 
     }
 }
