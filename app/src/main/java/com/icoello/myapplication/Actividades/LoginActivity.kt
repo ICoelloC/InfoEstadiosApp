@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
     var email: String = ""
     var pass: String = ""
 
-    enum class ProviderType{
+    enum class ProviderType {
         BASIC,
         GOOGLE
     }
@@ -69,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun initGoogle(){
+    private fun initGoogle() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -78,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient.signOut()
     }
 
-    private fun loginGoogle(){
+    private fun loginGoogle() {
         val signInIntent: Intent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
     }
@@ -88,25 +88,31 @@ class LoginActivity : AppCompatActivity() {
         if (requestCode == GOOGLE_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
 
-           try{
+            try {
 
-               val account = task.getResult(ApiException::class.java)
-               if (account != null){
+                val account = task.getResult(ApiException::class.java)
+                if (account != null) {
 
-                   val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                   FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener {
-                       if (it.isSuccessful){
-                           abrirMain()
-                       }else{
-                           Toast.makeText(this,"Error al iniciar sesion con Google", Toast.LENGTH_SHORT).show()
-                       }
-                   }
+                    val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                    FirebaseAuth.getInstance().signInWithCredential(credential)
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                abrirMain()
+                            } else {
+                                Toast.makeText(
+                                    this,
+                                    "Error al iniciar sesion con Google",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
 
-               }
+                }
 
-           }catch (e: ApiException){
-               Toast.makeText(this,"Error al iniciar sesion con Google", Toast.LENGTH_SHORT).show()
-           }
+            } catch (e: ApiException) {
+                Toast.makeText(this, "Error al iniciar sesion con Google", Toast.LENGTH_SHORT)
+                    .show()
+            }
 
         }
 
@@ -143,11 +149,11 @@ class LoginActivity : AppCompatActivity() {
             .addOnFailureListener { e -> Log.w(TAG, "Error insertar usuario", e) }
     }
 
-    private fun login(){
+    private fun login() {
         email = loginEmail.text.toString().trim()
         pass = UtilEncryptor.encrypt(loginPassword.text.toString().trim())!!
 
-        if (checkEmpty(email, pass)){
+        if (checkEmpty(email, pass)) {
             if (Utils.isNetworkAvailable(this)) {
                 userExists(email, pass)
             } else {
@@ -168,7 +174,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun userExists(email: String, password: String){
+    private fun userExists(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -185,72 +191,7 @@ class LoginActivity : AppCompatActivity() {
 
             }
     }
-/*
-    private fun insertarUsuario(user: FirebaseUser) {
-        val usuario = Usuario(
-            id = user.uid,
-            username = user.displayName.toString(),
-            correo = user.email.toString(),
-            foto = user.photoUrl.toString()
-        )
-        FireStore.collection("usuarios")
-            .document(usuario.id)
-            .set(usuario)
-            .addOnSuccessListener { Log.i(TAG, "Usuario insertado") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error insertar usuario", e) }
-    }
 
-    private fun initUI() {
-        loginEmail = findViewById(R.id.loginEmail)
-        loginPassword = findViewById(R.id.loginPassword)
-        loginLoginButton = findViewById(R.id.loginLoginButton)
-        loginGoogleLoginButton = findViewById(R.id.loginGoogleLoginButton)
-        loginGoRegisterButton = findViewById(R.id.loginGoRegisterButton)
-
-        loginLoginButton.setOnClickListener {
-            val email = loginEmail.text.toString()
-            val password = loginPassword.text.toString()
-            if (checkEmpty(email, password)) {
-                iniciarSesion(email, password)
-            }
-        }
-
-        loginGoogleLoginButton.setOnClickListener { iniciarSesionGoogle() }
-
-        loginGoRegisterButton.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java))
-            finish()
-        }
-    }
-
-    private fun iniciarSesionGoogle() {
-        /*
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, Rc_SIGN_IN)
-         */
-        val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        val googleClient = GoogleSignIn.getClient(this, googleConf)
-        googleClient.signOut()
-
-        startActivityForResult(googleClient.signInIntent, googleSignIn)
-    }
-
-
-    private fun iniciarSesion(email: String, password: String) {
-        Auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    abrirMain()
-                } else {
-                    showErrorAlert("Error al iniciar sesión, no hay ningún usuario con ese correo o contraseña")
-                }
-            }
-    }
-*/
     private fun abrirMain() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()

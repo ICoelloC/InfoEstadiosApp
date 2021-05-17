@@ -71,24 +71,6 @@ class EstadiosListAdapter(
     }
 
     private fun imagenEstadio(estadio: Estadio, holder: EstadiosViewHolder) {
-        /*
-        val docRef = FireStore.collection("estadios").document(estadio.id)
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null){
-                    val miImagen = document.toObject(Estadio::class.java)
-                    Picasso.get()
-                        .load(miImagen?.foto)
-                        .into(holder.itemFoto)
-                }else{
-                    imagenPorDefecto(holder)
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "ERROR: " + exception.localizedMessage)
-                imagenPorDefecto(holder)
-            }
-        */
         if (estadio.foto != "") {
             Picasso.get()
                 .load(estadio?.foto)
