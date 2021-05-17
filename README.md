@@ -10,6 +10,9 @@ Aplicación presentada para la recuperación del módulo de desarrollo de Aplica
 por nuestro estadio favorito y verlos en la vista de mapa general, podiendo ver rapidamente la info
 del estado
 
+### Versiones
+**v1.0.0**: Version de lanzamiento inicial.
+
 ### Tecnologías
 [![Android](https://img.shields.io/badge/App-Android-g)](https://www.android.com/intl/es_es/)
 [![Kotlin](https://img.shields.io/badge/Code-Kotlin-blue)](https://kotlinlang.org/)
