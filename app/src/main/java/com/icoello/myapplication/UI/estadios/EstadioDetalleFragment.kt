@@ -621,7 +621,7 @@ class EstadioDetalleFragment(
                     Toast.makeText(context, "¡Fallo Galeria!", Toast.LENGTH_SHORT).show()
                 }
             }
-        } else if (requestCode == CAMARA) {// Cogemos la imagen, pero podemos coger la imagen o su modo en baja calidad (thumbnail)
+        } else if (requestCode == CAMARA) {
             try {
                 if (Build.VERSION.SDK_INT < 28) {
                     this.FOTO =

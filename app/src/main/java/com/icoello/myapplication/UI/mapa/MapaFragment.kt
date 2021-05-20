@@ -83,7 +83,9 @@ class MapaFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
                     val miLugar = document.toObject(Estadio::class.java)
                     listaEstadios.add(miLugar)
                 }
-                procesarEstadios(listaEstadios)
+                if (listaEstadios.size > 0){
+                    procesarEstadios(listaEstadios)
+                }
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(context,
@@ -109,28 +111,54 @@ class MapaFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
                 if (document != null) {
                     val posicion = LatLng(estadio.latitud.toDouble(), estadio.longitud.toDouble())
                     val imageView = ImageView(context)
-                    Picasso.get()
-                        .load(estadio.foto)
-                        .into(imageView, object : com.squareup.picasso.Callback {
-                            override fun onSuccess() {
-                                val temp = (imageView.drawable as BitmapDrawable).bitmap
-                                val pin: Bitmap = crearPin(temp)!!
-                                val marker = mMap.addMarker(
-                                    MarkerOptions() // Posición
-                                        .position(posicion) // Título
-                                        .title(estadio.nombre) // Subtitulo
-                                        .snippet(estadio.equipo + ", capacidad " + estadio.capacidad) // Color o tipo d icono
-                                        .anchor(0.5f, 0.907f)
-                                        .icon(BitmapDescriptorFactory.fromBitmap(pin))
-                                )
-                                // Le añado como tag el lugar para recuperarlo
-                                marker.tag = estadio
-                            }
 
-                            override fun onError(e: Exception) {
-                                Log.d(TAG, "Error al descargar imagen")
-                            }
-                        })
+                    if (estadio.foto.isNotEmpty()){
+                        Picasso.get()
+                            .load(estadio.foto)
+                            .into(imageView, object : com.squareup.picasso.Callback {
+                                override fun onSuccess() {
+                                    val temp = (imageView.drawable as BitmapDrawable).bitmap
+                                    val pin: Bitmap = crearPin(temp)!!
+                                    val marker = mMap.addMarker(
+                                        MarkerOptions() // Posición
+                                            .position(posicion) // Título
+                                            .title(estadio.nombre) // Subtitulo
+                                            .snippet(estadio.equipo + ", capacidad " + estadio.capacidad) // Color o tipo d icono
+                                            .anchor(0.5f, 0.907f)
+                                            .icon(BitmapDescriptorFactory.fromBitmap(pin))
+                                    )
+                                    // Le añado como tag el lugar para recuperarlo
+                                    marker.tag = estadio
+                                }
+
+                                override fun onError(e: Exception) {
+                                    Log.d(TAG, "Error al descargar imagen")
+                                }
+                            })
+                    }else{
+                        Picasso.get()
+                            .load(R.drawable.logo)
+                            .into(imageView, object : com.squareup.picasso.Callback {
+                                override fun onSuccess() {
+                                    val temp = (imageView.drawable as BitmapDrawable).bitmap
+                                    val pin: Bitmap = crearPin(temp)!!
+                                    val marker = mMap.addMarker(
+                                        MarkerOptions() // Posición
+                                            .position(posicion) // Título
+                                            .title(estadio.nombre) // Subtitulo
+                                            .snippet(estadio.equipo + ", capacidad " + estadio.capacidad) // Color o tipo d icono
+                                            .anchor(0.5f, 0.907f)
+                                            .icon(BitmapDescriptorFactory.fromBitmap(pin))
+                                    )
+                                    // Le añado como tag el lugar para recuperarlo
+                                    marker.tag = estadio
+                                }
+
+                                override fun onError(e: Exception) {
+                                    Log.d(TAG, "Error al descargar imagen")
+                                }
+                            })
+                    }
 
                 } else {
                     Log.i(TAG, "Error: No exite fotografía")
@@ -153,7 +181,6 @@ class MapaFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             val roundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
             val bitmapRect = RectF()
             canvas.save()
-            //Bitmap bitmap = BitmapFactory.decodeFile(path.toString()); /*generate bitmap here if your image comes from any url*/
             if (bitmap != null) {
                 val shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
                 val matrix = Matrix()
@@ -206,38 +233,5 @@ class MapaFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
         return false
     }
 
-    private fun mostrarDialogo(estadio: Estadio) {
-        val builder = AlertDialog.Builder(context)
-        val inflater = requireActivity().layoutInflater
-        val vista = inflater.inflate(R.layout.intem_visualizacion_mapa, null)
-        // Le ponemos las cosas
-        val nombre = vista.findViewById(R.id.mapaEstadioTextNombre) as TextView
-        nombre.text = estadio.nombre
-        val imagen = vista.findViewById(R.id.mapaEstadioImagen) as ImageView
-        val docRef = FireStore.collection("estadios").document(estadio.foto)
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    val miImagen = estadio.foto
-                    Picasso
-                        .get()
-                        .load(miImagen)
-                        .into(imagen)
-                } else {
-                    Log.i(TAG, "Error: No exite fotografía")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "ERROR: " + exception.localizedMessage)
-            }
 
-        builder
-            .setView(vista)
-            .setIcon(R.drawable.ic_location)
-            .setTitle("Estadio")
-            .setPositiveButton(R.string.aceptar) { _, _ ->
-                null
-            }
-        builder.show()
-    }
 }

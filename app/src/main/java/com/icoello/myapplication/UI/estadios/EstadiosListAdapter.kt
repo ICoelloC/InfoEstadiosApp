@@ -21,7 +21,7 @@ class EstadiosListAdapter(
     private val accionPrincipal: (Estadio) -> Unit,
 ) : RecyclerView.Adapter<EstadiosListAdapter.EstadiosViewHolder>() {
 
-    private var FireStore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private var fireStore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     companion object {
         private const val TAG = "Adapter"
@@ -37,9 +37,8 @@ class EstadiosListAdapter(
     override fun onBindViewHolder(holder: EstadiosViewHolder, position: Int) {
         holder.itemNombre.text = listaEstadios[position].nombre
         holder.itemSeguidores.text = listaEstadios[position].seguidores.toString()
-        imagenEstadio(listaEstadios[position], holder)
-
-        colorBotonSeguir(position, holder)
+        cargFotoEstadio(listaEstadios[position], holder)
+        colorSeguir(position, holder)
         holder.itemSeguir.setOnClickListener {
             eventoBotonSeguir(position, holder)
         }
@@ -70,10 +69,10 @@ class EstadiosListAdapter(
         return listaEstadios.size
     }
 
-    private fun imagenEstadio(estadio: Estadio, holder: EstadiosViewHolder) {
+    private fun cargFotoEstadio(estadio: Estadio, holder: EstadiosViewHolder) {
         if (estadio.foto != "") {
             Picasso.get()
-                .load(estadio?.foto)
+                .load(estadio.foto)
                 .into(holder.itemFoto)
         } else {
             imagenPorDefecto(holder)
@@ -91,17 +90,17 @@ class EstadiosListAdapter(
 
     private fun eventoBotonSeguir(position: Int, holder: EstadiosViewHolder) {
         listaEstadios[position].seguido = !listaEstadios[position].seguido
-        colorBotonSeguir(position, holder)
+        colorSeguir(position, holder)
         if (listaEstadios[position].seguido)
             listaEstadios[position].seguidores++
         else
             listaEstadios[position].seguidores--
 
-        actualizarEstadioSeguidores(listaEstadios[position], holder)
+        actualizarEstadioSeguidores(listaEstadios[position])
     }
 
-    private fun actualizarEstadioSeguidores(estadio: Estadio, holder: EstadiosViewHolder) {
-        var estadioRef = FireStore.collection("estadios").document(estadio.id)
+    private fun actualizarEstadioSeguidores(estadio: Estadio) {
+        val estadioRef = fireStore.collection("estadios").document(estadio.id)
         estadioRef
             .update(
                 mapOf(
@@ -114,7 +113,7 @@ class EstadiosListAdapter(
             }.addOnFailureListener { e -> Log.w(TAG, "Error actualiza votos", e) }
     }
 
-    private fun colorBotonSeguir(position: Int, holder: EstadiosViewHolder) {
+    private fun colorSeguir(position: Int, holder: EstadiosViewHolder) {
         if (listaEstadios[position].seguido)
             holder.itemSeguir.backgroundTintList =
                 AppCompatResources.getColorStateList(holder.context, R.color.seguirOn)
