@@ -1,5 +1,6 @@
 package com.icoello.myapplication.UI.estadios
 
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 import com.icoello.myapplication.Entidades.Estadio
 import com.icoello.myapplication.R
+import com.icoello.myapplication.Utilidades.CirculoTransformacion
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_estadio.view.*
 
@@ -21,7 +23,7 @@ class EstadiosListAdapter(
     private val accionPrincipal: (Estadio) -> Unit,
 ) : RecyclerView.Adapter<EstadiosListAdapter.EstadiosViewHolder>() {
 
-    private var FireStore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private var fireStore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     companion object {
         private const val TAG = "Adapter"
@@ -37,9 +39,13 @@ class EstadiosListAdapter(
     override fun onBindViewHolder(holder: EstadiosViewHolder, position: Int) {
         holder.itemNombre.text = listaEstadios[position].nombre
         holder.itemSeguidores.text = listaEstadios[position].seguidores.toString()
-        imagenEstadio(listaEstadios[position], holder)
+        cargFotoEstadio(listaEstadios[position], holder)
+        colorSeguir(position, holder)
 
-        colorBotonSeguir(position, holder)
+        holder.itemFav.setOnClickListener {
+            eventoIconoSeguir(position, holder)
+        }
+
         holder.itemSeguir.setOnClickListener {
             eventoBotonSeguir(position, holder)
         }
@@ -47,6 +53,17 @@ class EstadiosListAdapter(
         holder.itemFoto.setOnClickListener {
             accionPrincipal(listaEstadios[position])
         }
+    }
+
+    private fun eventoIconoSeguir(position: Int, holder: EstadiosViewHolder) {
+        listaEstadios[position].seguido = !listaEstadios[position].seguido
+        colorSeguir(position, holder)
+        if (listaEstadios[position].seguido)
+            listaEstadios[position].seguidores++
+        else
+            listaEstadios[position].seguidores--
+
+        actualizarEstadioSeguidores(listaEstadios[position])
     }
 
     fun removeItem(position: Int) {
@@ -70,10 +87,12 @@ class EstadiosListAdapter(
         return listaEstadios.size
     }
 
-    private fun imagenEstadio(estadio: Estadio, holder: EstadiosViewHolder) {
+    private fun cargFotoEstadio(estadio: Estadio, holder: EstadiosViewHolder) {
         if (estadio.foto != "") {
             Picasso.get()
-                .load(estadio?.foto)
+                .load(estadio.foto)
+                .transform(CirculoTransformacion())
+                .resize(160, 160)
                 .into(holder.itemFoto)
         } else {
             imagenPorDefecto(holder)
@@ -83,7 +102,7 @@ class EstadiosListAdapter(
     private fun imagenPorDefecto(holder: EstadiosViewHolder) {
         holder.itemFoto.setImageBitmap(
             BitmapFactory.decodeResource(
-                holder.context?.resources,
+                holder.context.resources,
                 R.drawable.logo
             )
         )
@@ -91,17 +110,17 @@ class EstadiosListAdapter(
 
     private fun eventoBotonSeguir(position: Int, holder: EstadiosViewHolder) {
         listaEstadios[position].seguido = !listaEstadios[position].seguido
-        colorBotonSeguir(position, holder)
+        colorSeguir(position, holder)
         if (listaEstadios[position].seguido)
             listaEstadios[position].seguidores++
         else
             listaEstadios[position].seguidores--
 
-        actualizarEstadioSeguidores(listaEstadios[position], holder)
+        actualizarEstadioSeguidores(listaEstadios[position])
     }
 
-    private fun actualizarEstadioSeguidores(estadio: Estadio, holder: EstadiosViewHolder) {
-        var estadioRef = FireStore.collection("estadios").document(estadio.id)
+    private fun actualizarEstadioSeguidores(estadio: Estadio) {
+        val estadioRef = fireStore.collection("estadios").document(estadio.id)
         estadioRef
             .update(
                 mapOf(
@@ -114,13 +133,15 @@ class EstadiosListAdapter(
             }.addOnFailureListener { e -> Log.w(TAG, "Error actualiza votos", e) }
     }
 
-    private fun colorBotonSeguir(position: Int, holder: EstadiosViewHolder) {
+    private fun colorSeguir(position: Int, holder: EstadiosViewHolder) {
         if (listaEstadios[position].seguido)
-            holder.itemSeguir.backgroundTintList =
-                AppCompatResources.getColorStateList(holder.context, R.color.seguirOn)
+            holder.itemFav.setImageResource(R.drawable.ic_fav_seguido)
+            /*holder.itemSeguir.backgroundTintList =
+                AppCompatResources.getColorStateList*/
         else
-            holder.itemSeguir.backgroundTintList =
-                AppCompatResources.getColorStateList(holder.context, R.color.seguirOff)
+            holder.itemFav.setImageResource(R.drawable.ic_fav)
+            /*holder.itemSeguir.backgroundTintList =
+                AppCompatResources.getColorStateList(holder.context, R.color.seguirOff)*/
     }
 
     class EstadiosViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -128,7 +149,8 @@ class EstadiosListAdapter(
         var itemNombre: TextView = itemView.itemEstadioNombre
         var itemSeguidores: TextView = itemView.itemEstadioSeguidores
         var itemSeguir: FloatingActionButton = itemView.itemEstadioSeguir
-        var context = itemView.context
+        var itemFav: ImageView = itemView.itemEstadioFavorito
+        var context: Context = itemView.context
     }
 
 }

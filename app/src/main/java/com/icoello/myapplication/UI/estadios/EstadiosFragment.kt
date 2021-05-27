@@ -22,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.icoello.myapplication.Entidades.Estadio
 import com.icoello.myapplication.R
+import kotlinx.android.synthetic.main.fragment_estadio_detalle.*
 import kotlinx.android.synthetic.main.fragment_estadios.*
 
 class EstadiosFragment : Fragment() {
@@ -183,7 +184,12 @@ class EstadiosFragment : Fragment() {
     private fun editarElemento(position: Int) {
         Log.i(TAG, "Editando el elemento pos: $position")
         actualizarVistaLista()
-        abrirDetalle(ESTADIOS[position], Modo.ACTUALIZAR)
+
+        if (ESTADIOS[position].id_usuario == Auth.currentUser.uid){
+            abrirDetalle(ESTADIOS[position], Modo.ACTUALIZAR)
+        }else{
+            Toast.makeText(requireContext(), "No tienes permiso para editarlo", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun actualizarItemLista(item: Estadio, position: Int) {
@@ -191,9 +197,18 @@ class EstadiosFragment : Fragment() {
         estadiosAdapter.notifyDataSetChanged()
     }
 
+    /**
+     *  fun borrarElemento, cuando deslizamos una tarjeta de derecha a izquierda ejecutaremos este
+     *  método que nos permite abrir el estadio en la vista para borrarlo, esta pendiente de cambiar para
+     *  no abrir directamente una interfaz, si no pregiuntar si queremos borrarlo directamente
+     */
     private fun borrarElemento(position: Int) {
         Log.i(TAG, "Borrando el elemento pos: $position")
-        abrirDetalle(ESTADIOS[position], Modo.ELIMINAR)
+        if (ESTADIOS[position].id_usuario == Auth.currentUser.uid){
+            abrirDetalle(ESTADIOS[position], Modo.ELIMINAR)
+        }else{
+            Toast.makeText(requireContext(), "No tienes permiso para borrarlo", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun eliminarItemLista(position: Int) {

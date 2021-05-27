@@ -44,4 +44,5 @@
     <string name="need_gallery">Sin permisos de galeria</string>
     <string name="userNotCorrect">Correo o contraseña invalidos</string>
     <string name="title_activity_maps" translatable="false">Map</string>
+    <string name="nombre_estadio">Nombre Estadio</string>
 </resources>
