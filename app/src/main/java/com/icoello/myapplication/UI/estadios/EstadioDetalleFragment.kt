@@ -225,8 +225,6 @@ class EstadioDetalleFragment(
     }
 
     private fun insertar() {
-        val id_foto = UUID.randomUUID().toString()
-
         ESTADIO = Estadio(
             id = UUID.randomUUID().toString(),
             nombre = detalleEstadioInputNombre.text.toString().trim(),

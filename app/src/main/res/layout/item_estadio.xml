@@ -15,66 +15,80 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="255dp">
+            android:layout_height="match_parent">
 
         <TextView
                 android:id="@+id/itemEstadioNombre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="192dp"
+                android:layout_height="29dp"
                 android:textColor="@color/white"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="Nombre Estadio"
+                android:text="@string/nombre_estadio"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.068"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="3dp" />
+                android:layout_marginTop="4dp" />
 
         <ImageView
                 android:id="@+id/itemEstadioFoto"
-                android:layout_width="match_parent"
-                android:layout_height="175dp"
+                android:layout_width="145dp"
+                android:layout_height="127dp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/logo"
-                android:layout_marginTop="2dp"
-                app:layout_constraintTop_toBottomOf="@+id/itemEstadioNombre"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.931"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="10dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 app:srcCompat="@drawable/ic_fav_off"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="304dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:id="@+id/itemEstadioSeguir"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="32dp"
-                app:backgroundTint="@color/seguirOff" />
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Seguidores: "
-                android:textColor="@color/white"
-                android:layout_marginTop="14dp"
-                app:layout_constraintTop_toBottomOf="@+id/itemEstadioFoto"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="11dp"
-                android:id="@+id/itemEstadioNumSeguidores" />
+                android:layout_marginBottom="16dp"
+                app:backgroundTint="@color/seguirOff"
+                android:visibility="gone" />
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="cantidad"
                 android:textColor="@color/white"
-                android:layout_marginTop="14dp"
-                app:layout_constraintTop_toBottomOf="@+id/itemEstadioFoto"
                 android:id="@+id/itemEstadioSeguidores"
                 app:layout_constraintStart_toEndOf="@+id/itemEstadioNumSeguidores"
-                android:layout_marginStart="7dp" />
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/itemEstadioNombre" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seguidores: "
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp"
+                android:id="@+id/itemEstadioNumSeguidores"
+                android:layout_marginTop="9dp"
+                app:layout_constraintTop_toBottomOf="@+id/itemEstadioNombre" />
+
+        <ImageView
+                android:layout_width="42dp"
+                android:layout_height="41dp"
+                app:srcCompat="@drawable/ic_fav"
+                android:id="@+id/itemEstadioFavorito"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="13dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="16dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
